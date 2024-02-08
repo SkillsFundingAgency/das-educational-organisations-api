@@ -22,7 +22,7 @@ builder.Services.AddSingleton(cfg => cfg.GetService<IOptions<EducationOrganisati
 builder.Services.AddServiceRegistration();
 
 var educationOrganisationsConfiguration = rootConfiguration
-    .GetSection(nameof(EducationOrganisationsConfiguration))
+    //.GetSection(nameof(EducationOrganisationsConfiguration))
     .Get<EducationOrganisationsConfiguration>();
 builder.Services.AddDatabaseRegistration(educationOrganisationsConfiguration!, rootConfiguration["EnvironmentName"]);
 

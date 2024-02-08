@@ -16,7 +16,7 @@ public static class DatabaseExtensions
         }
         else if (environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
         {
-            services.AddDbContext<EducationalOrganisationDataContext>(options=>options.UseSqlServer(config.ConnectionString),ServiceLifetime.Transient);
+            services.AddDbContext<EducationalOrganisationDataContext>(options=>options.UseSqlServer(config.DatabaseConnectionString),ServiceLifetime.Transient);
         }
         else
         {

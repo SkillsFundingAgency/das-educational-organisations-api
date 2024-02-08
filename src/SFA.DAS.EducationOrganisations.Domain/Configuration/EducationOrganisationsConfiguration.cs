@@ -2,5 +2,7 @@ namespace SFA.DAS.EducationOrganisations.Domain.Configuration;
 
 public class EducationOrganisationsConfiguration
 {
-    public string ConnectionString { get; set; }
+    public string DatabaseConnectionString { get; set; }
+    public string EdubaseUsername { get; set; }
+    public string EdubasePassword { get; set; }
 }

@@ -50,7 +50,7 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
             
         var connection = new SqlConnection
         {
-            ConnectionString = _configuration.ConnectionString,
+            ConnectionString = _configuration.DatabaseConnectionString,
             AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
         };
             
