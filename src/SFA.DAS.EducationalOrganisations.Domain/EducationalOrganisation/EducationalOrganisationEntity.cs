@@ -1,4 +1,4 @@
-namespace SFA.DAS.EducationOrganisations.Domain.EducationalOrganisation;
+namespace SFA.DAS.EducationalOrganisations.Domain.EducationalOrganisation;
 
 public class EducationalOrganisationEntity
 {

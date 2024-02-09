@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SFA.DAS.EducationOrganisations.Domain.EducationalOrganisation;
+using SFA.DAS.EducationalOrganisations.Domain.EducationalOrganisation;
 
-namespace SFA.DAS.EducationalOrganisations.Data.EducationalOrganisation;
+namespace SFA.DAS.EducationalOrganisations.Data.EducationalOrganisations;
 
 public class EducationalOrganisationEntityConfiguration : IEntityTypeConfiguration<EducationalOrganisationEntity>
 {
@@ -11,4 +11,4 @@ public class EducationalOrganisationEntityConfiguration : IEntityTypeConfigurati
         builder.ToTable("EducationalOrganisation");
         // builder.HasKey(x => x.Id);
     }
-}   
+}

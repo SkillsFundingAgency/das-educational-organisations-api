@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EducationOrganisations.Application.Commands.GetAllEducationalOrganisations
+namespace SFA.DAS.EducationalOrganisations.Application.Commands.GetAllEducationalOrganisations
 {
     public class GetAllEducationalOrganisationsQuery : IRequest<Unit>
     {

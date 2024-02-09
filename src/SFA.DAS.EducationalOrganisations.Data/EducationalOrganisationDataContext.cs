@@ -3,16 +3,16 @@ using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SFA.DAS.EducationalOrganisations.Data.EducationalOrganisation;
-using SFA.DAS.EducationOrganisations.Domain.Configuration;
-using SFA.DAS.EducationOrganisations.Domain.EducationalOrganisation;
+using SFA.DAS.EducationalOrganisations.Data.EducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Domain.Configuration;
+using SFA.DAS.EducationalOrganisations.Domain.EducationalOrganisation;
 
 namespace SFA.DAS.EducationalOrganisations.Data;
 
 public interface IEducationalOrganisationDataContext
 {
     DbSet<EducationalOrganisationEntity> EducationalOrganisationEntities { get; set; }
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken  = default (CancellationToken));
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 public class EducationalOrganisationDataContext : DbContext, IEducationalOrganisationDataContext
 {
@@ -29,9 +29,9 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
 
     public EducationalOrganisationDataContext(DbContextOptions options) : base(options)
     {
-            
+
     }
-    public EducationalOrganisationDataContext(IOptions<EducationOrganisationsConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) :base(options)
+    public EducationalOrganisationDataContext(IOptions<EducationOrganisationsConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) : base(options)
     {
         _azureServiceTokenProvider = azureServiceTokenProvider;
         _environmentConfiguration = environmentConfiguration;
@@ -40,21 +40,21 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLazyLoadingProxies();
-            
-        if (_configuration == null 
+
+        if (_configuration == null
             || _environmentConfiguration.EnvironmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)
             || _environmentConfiguration.EnvironmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
         {
             return;
         }
-            
+
         var connection = new SqlConnection
         {
             ConnectionString = _configuration.DatabaseConnectionString,
             AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
         };
-            
-        optionsBuilder.UseSqlServer(connection,options=>
+
+        optionsBuilder.UseSqlServer(connection, options =>
             options.EnableRetryOnFailure(
                 5,
                 TimeSpan.FromSeconds(20),
@@ -65,7 +65,7 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new EducationalOrganisationEntityConfiguration());
-        
+
         base.OnModelCreating(modelBuilder);
     }
 }

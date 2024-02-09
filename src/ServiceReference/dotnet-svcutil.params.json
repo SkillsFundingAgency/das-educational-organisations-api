@@ -1,0 +1,15 @@
+{
+  "providerId": "Microsoft.Tools.ServiceModel.Svcutil",
+  "version": "2.1.0",
+  "options": {
+    "inputs": [
+      "https://ea-edubase-api-prod.azurewebsites.net/edubase/service.wsdl"
+    ],
+    "namespaceMappings": [
+      "*, EdubaseSoap"
+    ],
+    "outputFile": "Reference.cs",
+    "targetFramework": "net8.0",
+    "typeReuseMode": "All"
+  }
+}

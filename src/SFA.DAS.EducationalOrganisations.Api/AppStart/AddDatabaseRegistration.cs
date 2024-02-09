@@ -1,7 +1,7 @@
 using Azure.Identity;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EducationalOrganisations.Data;
-using SFA.DAS.EducationOrganisations.Domain.Configuration;
+using SFA.DAS.EducationalOrganisations.Domain.Configuration;
 
 namespace SFA.DAS.EducationalOrganisations.Api.AppStart;
 

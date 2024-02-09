@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.EducationOrganisations.Application.Commands.GetAllEducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Application.Commands.GetAllEducationalOrganisations;
 
 namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 {

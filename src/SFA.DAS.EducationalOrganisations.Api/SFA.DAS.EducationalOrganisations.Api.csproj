@@ -24,15 +24,13 @@
         <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.84" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
-        <PackageReference Include="System.ServiceModel.Http" Version="8.0.0" />
-        <PackageReference Include="System.ServiceModel.Primitives" Version="8.0.0" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.Data\SFA.DAS.EducationalOrganisations.Data.csproj" />
-      <ProjectReference Include="..\SFA.DAS.EducationOrganisations.Application\SFA.DAS.EducationOrganisations.Application.csproj" />
-      <ProjectReference Include="..\SFA.DAS.EducationOrganisations.Domain\SFA.DAS.EducationOrganisations.Domain.csproj" />
+      <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.Application\SFA.DAS.EducationalOrganisations.Application.csproj" />
+      <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.Domain\SFA.DAS.EducationalOrganisations.Domain.csproj" />
     </ItemGroup>
 
 </Project>

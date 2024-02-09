@@ -1,4 +1,4 @@
-namespace SFA.DAS.EducationOrganisations.Domain.Configuration;
+namespace SFA.DAS.EducationalOrganisations.Domain.Configuration;
 
 public class EnvironmentConfiguration(string environmentName)
 {
