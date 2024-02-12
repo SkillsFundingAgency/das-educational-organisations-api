@@ -1,8 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EducationalOrganisations.Api.Responses;
-using SFA.DAS.EducationalOrganisations.Application.Commands.GetAllEducationalOrganisations;
-using SFA.DAS.EducationalOrganisations.Application.Commands.GetEducationalOrganisationById;
+using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById;
+using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
 
 namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 {
@@ -46,7 +47,29 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
             {
                 return NotFound();
             }
-            return Ok(result.EducationalOrganisation);
+
+            var response = (GetEducationalOrganisationByIdResponse)result;
+
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("search")]
+        public async Task<IActionResult> Search([FromQuery] string searchTerm)
+        {
+            var result = await _mediator.Send(new SearchEducationalOrganisationsQuery
+            {
+                SearchTerm = searchTerm
+            });
+
+            if (result.EducationalOrganisations == null)
+            {
+                return NotFound();
+            }
+
+            var response = (SearchEducationalOrganisationsResponse)result;
+
+            return Ok(response);
         }
     }
 }

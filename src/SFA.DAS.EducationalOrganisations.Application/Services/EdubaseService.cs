@@ -52,10 +52,9 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Could not get organisations from Edubase API");
+                    throw;
                 }
             }
-
-            return Array.Empty<EducationalOrganisationEntity>();
         }
     }
 }

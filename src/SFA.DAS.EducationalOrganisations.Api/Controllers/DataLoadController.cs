@@ -24,10 +24,18 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         [Route("")]
         public async Task<IActionResult> Import()
         {
-            _logger.LogInformation("Organisations import request received");
-            await _mediator.Send(new ImportEducationalOrganisationsCommand());
-            _logger.LogInformation("Organisations import completed successfully");
-            return NoContent();
+            try
+            {
+                _logger.LogInformation("Organisations import request received");
+                await _mediator.Send(new ImportEducationalOrganisationsCommand());
+                _logger.LogInformation("Organisations import completed successfully");
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during data import");
+                return BadRequest(ex.Message);
+            }           
         }
     }
 }

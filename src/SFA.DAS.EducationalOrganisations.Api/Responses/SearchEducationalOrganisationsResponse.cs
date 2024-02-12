@@ -1,15 +1,15 @@
-﻿using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
+﻿using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
 
 namespace SFA.DAS.EducationalOrganisations.Api.Responses
 {
-    public class GetAllEducationalOrganisationsResponse
+    public class SearchEducationalOrganisationsResponse
     {
         public required IEnumerable<EducationalOrganisationEntity> EducationalOrganisations { get; set; }
 
-        public static explicit operator GetAllEducationalOrganisationsResponse(GetAllEducationalOrganisationsResult source)
+        public static explicit operator SearchEducationalOrganisationsResponse(SearchEducationalOrganisationsResult source)
         {
-            return new GetAllEducationalOrganisationsResponse
+            return new SearchEducationalOrganisationsResponse
             {
                 EducationalOrganisations = source.EducationalOrganisations
             };

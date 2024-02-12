@@ -34,9 +34,9 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
 
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError("LARS Import - an error occurred while trying to import data from LARS file.", e);
+                _logger.LogError(ex, "LARS Import - an error occurred while trying to import data from LARS file.");
                 throw;
             }
         }

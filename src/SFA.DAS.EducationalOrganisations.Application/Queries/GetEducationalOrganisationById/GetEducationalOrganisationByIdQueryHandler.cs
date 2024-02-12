@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
-namespace SFA.DAS.EducationalOrganisations.Application.Commands.GetEducationalOrganisationById
+namespace SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById
 {
     public class GetEducationalOrganisationByIdQueryHandler : IRequestHandler<GetEducationalOrganisationByIdQuery, GetEducationalOrganisationByIdResult>
     {

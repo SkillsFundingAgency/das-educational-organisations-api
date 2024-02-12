@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EducationalOrganisations.Domain.Entities;
 
-namespace SFA.DAS.EducationalOrganisations.Application.Commands.GetEducationalOrganisationById
+namespace SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById
 {
     public class GetEducationalOrganisationByIdResult
     {
