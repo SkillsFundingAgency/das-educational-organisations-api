@@ -1,8 +1,8 @@
 ﻿using EdubaseSoap;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EducationalOrganisations.Application.Interfaces;
 using SFA.DAS.EducationalOrganisations.Domain.Configuration;
-using SFA.DAS.EducationalOrganisations.Domain.EducationalOrganisation;
+using SFA.DAS.EducationalOrganisations.Domain.Entities;
+using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
 namespace SFA.DAS.EducationalOrganisations.Application.Services
 {
@@ -56,6 +56,6 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
             }
 
             return Array.Empty<EducationalOrganisationEntity>();
-        }      
+        }
     }
 }

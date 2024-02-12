@@ -3,15 +3,17 @@ using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SFA.DAS.EducationalOrganisations.Data.EducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Data.EntityConfiguration;
 using SFA.DAS.EducationalOrganisations.Domain.Configuration;
-using SFA.DAS.EducationalOrganisations.Domain.EducationalOrganisation;
+using SFA.DAS.EducationalOrganisations.Domain.Entities;
 
 namespace SFA.DAS.EducationalOrganisations.Data;
 
 public interface IEducationalOrganisationDataContext
 {
     DbSet<EducationalOrganisationEntity> EducationalOrganisationEntities { get; set; }
+    DbSet<EducationalOrganisationImport> EducationalOrganisationImport { get; set; }
+    DbSet<ImportAudit> ImportAudit { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
 }
 public class EducationalOrganisationDataContext : DbContext, IEducationalOrganisationDataContext
@@ -19,7 +21,10 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
     private const string AzureResource = "https://database.windows.net/";
     private readonly ChainedTokenCredential _azureServiceTokenProvider;
     private readonly EnvironmentConfiguration _environmentConfiguration;
+
     public DbSet<EducationalOrganisationEntity> EducationalOrganisationEntities { get; set; }
+    public DbSet<EducationalOrganisationImport> EducationalOrganisationImport { get; set; }
+    public DbSet<ImportAudit> ImportAudit { get; set; }
 
     private readonly EducationOrganisationsConfiguration? _configuration;
 
@@ -65,6 +70,8 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new EducationalOrganisationEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new EducationalOrganisationImportConfiguration());
+        modelBuilder.ApplyConfiguration(new ImportAuditConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }
