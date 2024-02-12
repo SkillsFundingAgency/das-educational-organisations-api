@@ -8,8 +8,9 @@ public static class AddServiceRegistrationExtension
 {
     public static void AddServiceRegistration(this IServiceCollection services)
     {
-        // services.AddScoped<IEducationOrganisationRepository, EducationOrganisationRepository>();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllEducationalOrganisationsQuery).Assembly));
         services.AddTransient<IEdubaseService, EdubaseService>();
+        services.AddTransient<IEducationalOrganisationEntityService, EducationalOrganisationEntityService>();
+        services.AddTransient<IEducationalOrganisationImportService, EducationalOrganisationImportService>();
     }
 }

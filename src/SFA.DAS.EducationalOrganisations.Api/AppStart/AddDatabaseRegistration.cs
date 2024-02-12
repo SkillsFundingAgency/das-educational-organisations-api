@@ -9,7 +9,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.AppStart;
 
 public static class DatabaseExtensions
 {
-    public static void AddDatabaseRegistration(this IServiceCollection services, EducationOrganisationsConfiguration config, string? environmentName)
+    public static void AddDatabaseRegistration(this IServiceCollection services, EducationalOrganisationsConfiguration config, string? environmentName)
     {
         services.AddHttpContextAccessor();
         if (environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
@@ -37,5 +37,7 @@ public static class DatabaseExtensions
         );
 
         services.AddTransient<IImportAuditRepository, ImportAuditRepository>();
+        services.AddTransient<IEducationalOrganisationImportRepository, EducationalOrganisationImportRepository>();
+        services.AddTransient<IEducationalOrganisationEntityRepository, EducationalOrganisationEntityRepository>();
     }
 }

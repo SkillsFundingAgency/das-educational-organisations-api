@@ -26,6 +26,11 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
             return results;
         }
 
+        public async Task<EducationalOrganisationEntity?> GetById(Guid id)
+        {
+            return await _dataContext.EducationalOrganisationEntities.FindAsync(id);
+        }
+
         public void DeleteAll()
         {
             _dataContext.EducationalOrganisationEntities.RemoveRange(_dataContext.EducationalOrganisationEntities);

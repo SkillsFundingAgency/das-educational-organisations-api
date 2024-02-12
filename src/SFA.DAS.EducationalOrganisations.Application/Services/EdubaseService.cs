@@ -9,9 +9,9 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
     public class EdubaseService : IEdubaseService
     {
         private readonly ILogger<EdubaseService> _logger;
-        private readonly EducationOrganisationsConfiguration _configuration;
+        private readonly EducationalOrganisationsConfiguration _configuration;
 
-        public EdubaseService(ILogger<EdubaseService> logger, EducationOrganisationsConfiguration configuration)
+        public EdubaseService(ILogger<EdubaseService> logger, EducationalOrganisationsConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
@@ -46,7 +46,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
                         Town = x.Town,
                         County = x.County?.DisplayName ?? string.Empty,
                         PostCode = x.Postcode,
-                        URN = x.URN
+                        URN = x.URN.ToString()
                     }).ToArray();
                 }
                 catch (Exception ex)

@@ -16,14 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 var rootConfiguration = builder.Configuration.LoadConfiguration();
 
 builder.Services.AddOptions();
-builder.Services.Configure<EducationOrganisationsConfiguration>(rootConfiguration.GetSection(nameof(EducationOrganisationsConfiguration)));
-builder.Services.AddSingleton(cfg => cfg.GetService<IOptions<EducationOrganisationsConfiguration>>()!.Value);
+builder.Services.Configure<EducationalOrganisationsConfiguration>(rootConfiguration.GetSection(nameof(EducationalOrganisationsConfiguration)));
+builder.Services.AddSingleton(cfg => cfg.GetService<IOptions<EducationalOrganisationsConfiguration>>()!.Value);
 
 builder.Services.AddServiceRegistration();
 
 var educationOrganisationsConfiguration = rootConfiguration
-    .GetSection(nameof(EducationOrganisationsConfiguration))
-    .Get<EducationOrganisationsConfiguration>();
+    .GetSection(nameof(EducationalOrganisationsConfiguration))
+    .Get<EducationalOrganisationsConfiguration>();
 builder.Services.AddDatabaseRegistration(educationOrganisationsConfiguration!, rootConfiguration["EnvironmentName"]);
 
 if (rootConfiguration["EnvironmentName"] != "DEV")

@@ -13,17 +13,19 @@ public class EducationalOrganisationEntityConfiguration : IEntityTypeConfigurati
 
         builder.Property(x => x.Id).HasColumnName("Id").HasColumnType("uniqueidentifier").IsRequired().ValueGeneratedOnAdd();
 
-        builder.Property(x => x.Name).HasColumnName("Name").HasColumnType("varchar").IsRequired();
-        builder.Property(x => x.EducationalType).HasColumnName("EducationalType").HasColumnType("EducationalType").IsRequired();
-        builder.Property(x => x.AddressLine1).HasColumnName("AddressLine1").HasColumnType("AddressLine1").IsRequired(false);
-        builder.Property(x => x.AddressLine2).HasColumnName("AddressLine2").HasColumnType("AddressLine2").IsRequired(false);
-        builder.Property(x => x.AddressLine3).HasColumnName("AddressLine3").HasColumnType("AddressLine3").IsRequired(false);
-        builder.Property(x => x.Town).HasColumnName("Town").HasColumnType("Town").IsRequired(false);
-        builder.Property(x => x.County).HasColumnName("County").HasColumnType("County").IsRequired(false);
-        builder.Property(x => x.PostCode).HasColumnName("PostCode").HasColumnType("PostCode").IsRequired(false);
-        builder.Property(x => x.URN).HasColumnName("URN").HasColumnType("bigint").IsRequired(false);
+        builder.Property(x => x.Name).HasColumnName("Name").HasColumnType("nvarchar(350)").IsRequired();
+        builder.Property(x => x.EducationalType).HasColumnName("EducationalType").HasColumnType("nvarchar(150)").IsRequired();
+        builder.Property(x => x.AddressLine1).HasColumnName("AddressLine1").HasColumnType("nvarchar(150)").IsRequired(false);
+        builder.Property(x => x.AddressLine2).HasColumnName("AddressLine2").HasColumnType("nvarchar(150)").IsRequired(false);
+        builder.Property(x => x.AddressLine3).HasColumnName("AddressLine3").HasColumnType("nvarchar(150)").IsRequired(false);
+        builder.Property(x => x.Town).HasColumnName("Town").HasColumnType("nvarchar(50)").IsRequired(false);
+        builder.Property(x => x.County).HasColumnName("County").HasColumnType("nvarchar(50)").IsRequired(false);
+        builder.Property(x => x.PostCode).HasColumnName("PostCode").HasColumnType("nvarchar(8)").IsRequired(false);
+        builder.Property(x => x.URN).HasColumnName("URN").HasColumnType("nvarchar(100)").IsRequired(false);
 
         builder.HasIndex(x => x.Id).IsUnique();
+        builder.HasIndex(x => x.Name).IsUnique().HasDatabaseName("IX_EducationalOrganisation_Name");
+
     }
 
 }

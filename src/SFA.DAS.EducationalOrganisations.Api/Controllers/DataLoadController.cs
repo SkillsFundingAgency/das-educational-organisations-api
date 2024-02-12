@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.EducationalOrganisations.Application.Commands.GetAllEducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Application.Commands.ImportEducationalOrganisations;
 
 namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 {
@@ -20,12 +20,12 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Import()
         {
             _logger.LogInformation("Organisations import request received");
-            await _mediator.Send(new GetAllEducationalOrganisationsQuery());
+            await _mediator.Send(new ImportEducationalOrganisationsCommand());
             _logger.LogInformation("Organisations import completed successfully");
             return NoContent();
         }

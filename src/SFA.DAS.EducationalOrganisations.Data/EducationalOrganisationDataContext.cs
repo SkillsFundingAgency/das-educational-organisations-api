@@ -26,7 +26,7 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
     public DbSet<EducationalOrganisationImport> EducationalOrganisationImport { get; set; }
     public DbSet<ImportAudit> ImportAudit { get; set; }
 
-    private readonly EducationOrganisationsConfiguration? _configuration;
+    private readonly EducationalOrganisationsConfiguration? _configuration;
 
     public EducationalOrganisationDataContext()
     {
@@ -36,7 +36,7 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
     {
 
     }
-    public EducationalOrganisationDataContext(IOptions<EducationOrganisationsConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) : base(options)
+    public EducationalOrganisationDataContext(IOptions<EducationalOrganisationsConfiguration> config, DbContextOptions options, ChainedTokenCredential azureServiceTokenProvider, EnvironmentConfiguration environmentConfiguration) : base(options)
     {
         _azureServiceTokenProvider = azureServiceTokenProvider;
         _environmentConfiguration = environmentConfiguration;
