@@ -31,16 +31,13 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
 
             return new SearchEducationalOrganisationsResult
             {
-                EducationalOrganisations = await _educationalOrganisationEntityRepository.SearchByURN(request.SearchTerm)
+                EducationalOrganisations = await _educationalOrganisationEntityRepository.SearchByUrn(request.SearchTerm)
             };
         }
 
-        public bool IsSearchTermAReference(string searchTerm)
+        private static bool IsSearchTermAReference(string searchTerm)
         {
-            return ReferenceRegex().IsMatch(searchTerm);
+            return Regex.IsMatch(searchTerm, @"^[14]\d{5}$");
         }
-
-        [GeneratedRegex(@"^[14]\d{5}$")]
-        private static partial Regex ReferenceRegex();
     }
 }

@@ -17,7 +17,7 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
         {
             await _dataContext.EducationalOrganisationImport.AddRangeAsync(educationalOrganisationImports);
 
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<EducationalOrganisationImport>> GetAll()

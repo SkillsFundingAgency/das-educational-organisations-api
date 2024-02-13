@@ -22,7 +22,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
 
         public async Task PopulateDataFromStaging(IEnumerable<EducationalOrganisationImport> importOrgs, DateTime importStartTime)
         {
-            if (importOrgs != null && importOrgs.Any())
+            if (importOrgs.Any())
             {
                 try
                 {
@@ -40,7 +40,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Educational Organisation  - an error occurred while trying to load data from staging tables.");
+                    _logger.LogError(ex, "Educational Organisation  - an error occurred while trying to load data from staging tables");
                     throw;
                 }
             }

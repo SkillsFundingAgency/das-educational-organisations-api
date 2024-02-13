@@ -21,39 +21,49 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
         {
             var filter = new EstablishmentFilter
             {
-                Fields = ["EstablishmentName", "TypeOfEstablishment", "Street", "Locality", "Address3", "Town", "County", "Postcode", "URN"]
+                Fields = new StringList
+                { 
+                    "EstablishmentName", 
+                    "TypeOfEstablishment", 
+                    "Street", 
+                    "Locality", 
+                    "Address3", 
+                    "Town", 
+                    "County", 
+                    "Postcode", 
+                    "URN" 
+                }
             };
 
-            using (var client = new EdubaseClient())
+            await using var client = new EdubaseClient();
+
+            try
             {
-                try
+                client.ClientCredentials.UserName.UserName = _configuration.EdubaseUsername;
+                client.ClientCredentials.UserName.Password = _configuration.EdubasePassword;
+
+                var establishments = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
+
+                if (establishments == null || establishments.Establishments.Count == 0)
+                    return Array.Empty<EducationalOrganisationEntity>();
+
+                return establishments.Establishments.Select(x => new EducationalOrganisationEntity
                 {
-                    client.ClientCredentials.UserName.UserName = _configuration.EdubaseUsername;
-                    client.ClientCredentials.UserName.Password = _configuration.EdubasePassword;
-
-                    var establishments = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
-
-                    if (establishments == null || establishments?.Establishments.Count == 0)
-                        return Array.Empty<EducationalOrganisationEntity>();
-
-                    return establishments.Establishments.Select(x => new EducationalOrganisationEntity
-                    {
-                        Name = x.EstablishmentName,
-                        EducationalType = x.TypeOfEstablishment?.DisplayName ?? string.Empty,
-                        AddressLine1 = x.Street,
-                        AddressLine2 = x.Locality,
-                        AddressLine3 = x.Address3,
-                        Town = x.Town,
-                        County = x.County?.DisplayName ?? string.Empty,
-                        PostCode = x.Postcode,
-                        URN = x.URN.ToString()
-                    }).ToArray();
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Could not get organisations from Edubase API");
-                    throw;
-                }
+                    Name = x.EstablishmentName,
+                    EducationalType = x.TypeOfEstablishment?.DisplayName ?? string.Empty,
+                    AddressLine1 = x.Street,
+                    AddressLine2 = x.Locality,
+                    AddressLine3 = x.Address3,
+                    Town = x.Town,
+                    County = x.County?.DisplayName ?? string.Empty,
+                    PostCode = x.Postcode,
+                    URN = x.URN.ToString()
+                }).ToArray();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Could not get organisations from Edubase API");
+                throw;
             }
         }
     }

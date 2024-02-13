@@ -8,7 +8,7 @@ namespace SFA.DAS.EducationalOrganisations.Domain.Interfaces
         Task<IEnumerable<EducationalOrganisationEntity>> GetAll();
         Task<EducationalOrganisationEntity?> GetById(Guid id);
         Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm);
-        Task<IEnumerable<EducationalOrganisationEntity>> SearchByURN(string urn);
+        Task<IEnumerable<EducationalOrganisationEntity>> SearchByUrn(string urn);
         void DeleteAll();
     }
 }

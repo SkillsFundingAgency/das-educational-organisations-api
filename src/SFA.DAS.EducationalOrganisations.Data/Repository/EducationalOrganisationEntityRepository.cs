@@ -13,11 +13,11 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
             _dataContext = dataContext;
         }
 
-        public async Task InsertMany(IEnumerable<EducationalOrganisationEntity> educationalOrganisationEntitys)
+        public async Task InsertMany(IEnumerable<EducationalOrganisationEntity> educationalOrganisationEntities)
         {
-            await _dataContext.EducationalOrganisationEntities.AddRangeAsync(educationalOrganisationEntitys);
+            await _dataContext.EducationalOrganisationEntities.AddRangeAsync(educationalOrganisationEntities);
 
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<EducationalOrganisationEntity>> GetAll()
@@ -38,7 +38,7 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
                               .ToListAsync();
         }
         
-        public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByURN(string urn)
+        public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByUrn(string urn)
         {
             return await _dataContext.EducationalOrganisationEntities
                               .Where(x => x.URN.Contains(urn))

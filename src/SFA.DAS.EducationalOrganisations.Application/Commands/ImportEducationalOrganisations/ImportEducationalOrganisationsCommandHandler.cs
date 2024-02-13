@@ -26,11 +26,11 @@ namespace SFA.DAS.EducationalOrganisations.Application.Commands.ImportEducationa
         {
             var importStartTime = DateTime.Now;
 
-            _logger.LogInformation($"Attempting GetAllEducationalOrganisationsQuery");
+            _logger.LogInformation("Attempting GetAllEducationalOrganisationsQuery");
 
             var organisations = await _edubaseService.GetOrganisations();
 
-            _logger.LogInformation($"Retrieved educational organisations with TotalCount: {organisations.Count}");
+            _logger.LogInformation("Retrieved educational organisations with TotalCount: {Count}", organisations.Count);
 
             if (organisations == null || organisations.Count == 0) return Unit.Value;
 

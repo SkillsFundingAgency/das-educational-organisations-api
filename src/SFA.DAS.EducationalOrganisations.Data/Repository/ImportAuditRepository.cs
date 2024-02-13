@@ -15,7 +15,7 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
         public async Task Insert(ImportAudit importAudit)
         {
             await _dataContext.ImportAudit.AddAsync(importAudit);
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

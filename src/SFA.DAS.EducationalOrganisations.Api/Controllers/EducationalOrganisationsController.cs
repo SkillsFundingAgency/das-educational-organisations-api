@@ -62,7 +62,8 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
                 SearchTerm = searchTerm
             });
 
-            if (result.EducationalOrganisations == null)
+            if (result.EducationalOrganisations == null
+                || !result.EducationalOrganisations.Any())
             {
                 return NotFound();
             }

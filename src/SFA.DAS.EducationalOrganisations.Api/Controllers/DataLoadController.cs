@@ -6,7 +6,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 {
     [ApiVersion("1.0")]
     [ApiController]
-    [Route("/ops/dataload/")]
+    [Route("/ops/[controller]")]
     public class DataLoadController : ControllerBase
     {
         private readonly IMediator _mediator;
