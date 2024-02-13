@@ -9,7 +9,7 @@ public class WhenCastingFromEducationalOrganisationEntity
     [Test, MoqAutoData]
     public void Then_The_Fields_Are_Correctly_Mapped(EducationalOrganisationEntity frameworkImport)
     {
-        var actual = (EducationalOrganisationImport)frameworkImport;
+        EducationalOrganisationImport actual = frameworkImport;
 
         actual.Should().BeEquivalentTo(frameworkImport);
     }

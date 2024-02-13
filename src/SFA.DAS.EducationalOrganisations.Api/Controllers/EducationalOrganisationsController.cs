@@ -13,14 +13,11 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
     public class EducationalOrganisationsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly ILogger<EducationalOrganisationsController> _logger;
 
         public EducationalOrganisationsController(
-            IMediator mediator,
-            ILogger<EducationalOrganisationsController> logger)
+            IMediator mediator)
         {
             _mediator = mediator;
-            _logger = logger;
         }
 
         [HttpGet]

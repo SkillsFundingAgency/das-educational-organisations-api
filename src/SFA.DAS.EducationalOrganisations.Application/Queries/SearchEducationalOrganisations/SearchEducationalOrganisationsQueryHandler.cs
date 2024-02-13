@@ -35,9 +35,17 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
             };
         }
 
-        private static bool IsSearchTermAReference(string searchTerm)
+        private bool IsSearchTermAReference(string searchTerm)
         {
-            return Regex.IsMatch(searchTerm, @"^[14]\d{5}$"); // @"^[124]\d{4,5}$" TBC
+            try
+            {
+                return Regex.IsMatch(searchTerm, @"^[14]\d{5}$", RegexOptions.None, TimeSpan.FromMilliseconds(1000)); // @"^[124]\d{4,5}$" TBC
+            }
+            catch (RegexMatchTimeoutException ex)
+            {
+                _logger.LogInformation(ex, "IsSearchTermAReference Regex timeout");
+                return false;
+            }
         }
     }
 }

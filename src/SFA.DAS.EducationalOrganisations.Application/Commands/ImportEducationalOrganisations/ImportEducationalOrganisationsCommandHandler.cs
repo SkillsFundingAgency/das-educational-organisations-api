@@ -32,7 +32,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Commands.ImportEducationa
 
             _logger.LogInformation("Retrieved educational organisations with TotalCount: {Count}", organisations.Count);
 
-            if (organisations == null || organisations.Count == 0) return Unit.Value;
+            if (organisations.Count == 0) return Unit.Value;
 
             //load data into Staging
             await _educationalOrganisationImportService.ImportDataIntoStaging(organisations);
