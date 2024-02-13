@@ -27,5 +27,4 @@ public class EducationalOrganisationEntityConfiguration : IEntityTypeConfigurati
         builder.HasIndex(x => x.Name).IsUnique().HasDatabaseName("IX_EducationalOrganisation_Name");
 
     }
-
 }

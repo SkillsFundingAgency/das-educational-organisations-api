@@ -5,5 +5,6 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
     public class SearchEducationalOrganisationsQuery : IRequest<SearchEducationalOrganisationsResult>
     {
         public string SearchTerm { get; set; } = "";
+        public int MaximumResults { get; set; }
     }
 }

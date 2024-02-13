@@ -22,6 +22,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 
         [HttpPost]
         [Route("")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Import()
         {
             try
@@ -34,8 +35,8 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during data import");
-                return BadRequest(ex.Message);
-            }           
+                return BadRequest(ex.Message); //test comment
+            }
         }
     }
 }

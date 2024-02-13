@@ -71,6 +71,7 @@ builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EducationalOrganisationsApi", Version = "v1" });
+    c.SwaggerDoc("operations", new OpenApiInfo { Title = "EducationalOrganisationsApi operations" });
     c.OperationFilter<SwaggerVersionHeaderFilter>();
     c.DocumentFilter<JsonPatchDocumentFilter>();
 });
@@ -86,6 +87,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "EducationalOrganisationsApi v1");
+    c.SwaggerEndpoint("/swagger/operations/swagger.json", "Operations v1");
     c.RoutePrefix = string.Empty;
 });
 

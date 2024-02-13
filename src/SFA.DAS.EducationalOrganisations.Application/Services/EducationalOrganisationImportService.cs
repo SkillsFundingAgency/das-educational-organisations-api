@@ -24,19 +24,19 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
         {
             try
             {
-                _logger.LogInformation("LARS Import - data into staging - started");
+                _logger.LogInformation("EducationalOrganisation Import - data into staging - started");
 
                 _educationalOrganisationImportRepository.DeleteAll();
 
                 await _educationalOrganisationImportRepository.InsertMany(organisations.Select(c => (EducationalOrganisationImport)c).ToList());
 
-                _logger.LogInformation("LARS Import - data into staging - finished");
+                _logger.LogInformation("EducationalOrganisation Import - data into staging - finished");
 
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "LARS Import - an error occurred while trying to import data from LARS file");
+                _logger.LogError(ex, "EducationalOrganisation Import - an error occurred while trying to import data from LARS file");
                 throw;
             }
         }
