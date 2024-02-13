@@ -25,6 +25,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 
         [HttpGet]
         [Route("")]
+        [ProducesResponseType(typeof(GetAllEducationalOrganisationsResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllEducationalOrganisationsQuery());
@@ -36,6 +37,8 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [ProducesResponseType(typeof(GetEducationalOrganisationByIdResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _mediator.Send(new GetEducationalOrganisationByIdQuery
@@ -55,11 +58,14 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 
         [HttpGet]
         [Route("search")]
-        public async Task<IActionResult> Search([FromQuery] string searchTerm)
+        [ProducesResponseType(typeof(SearchEducationalOrganisationsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Search([FromQuery] string searchTerm, [FromQuery] int maximumResults = 500)
         {
             var result = await _mediator.Send(new SearchEducationalOrganisationsQuery
             {
-                SearchTerm = searchTerm
+                SearchTerm = searchTerm,
+                MaximumResults = maximumResults
             });
 
             if (result.EducationalOrganisations == null

@@ -31,11 +31,13 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
             return await _dataContext.EducationalOrganisationEntities.FindAsync(id);
         }
 
-        public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm)
+        public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm, int maximumResults)
         {
-            return await _dataContext.EducationalOrganisationEntities
+            var organisations = await _dataContext.EducationalOrganisationEntities
                               .Where(x => x.Name.Contains(searchTerm))
                               .ToListAsync();
+
+            return organisations.Take(maximumResults);
         }
         
         public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByUrn(string urn)

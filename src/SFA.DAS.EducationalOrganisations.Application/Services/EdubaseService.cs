@@ -34,20 +34,15 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
                     "URN" 
                 }
             };
-
-            await using var client = new EdubaseClient();
-
+           
             try
-            {
-                client.ClientCredentials.UserName.UserName = _configuration.EdubaseUsername;
-                client.ClientCredentials.UserName.Password = _configuration.EdubasePassword;
+            {               
+                var establishments = await FindEstablishmentsAsync(filter);
 
-                var establishments = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
-
-                if (establishments == null || establishments.Establishments.Count == 0)
+                if (establishments == null || establishments.Count == 0)
                     return Array.Empty<EducationalOrganisationEntity>();
 
-                return establishments.Establishments.Select(x => new EducationalOrganisationEntity
+                return establishments.Select(x => new EducationalOrganisationEntity
                 {
                     Name = x.EstablishmentName,
                     EducationalType = x.TypeOfEstablishment?.DisplayName ?? string.Empty,
@@ -66,5 +61,28 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
                 throw;
             }
         }
+
+        public async Task<List<Establishment>> FindEstablishmentsAsync(EstablishmentFilter filter)
+        {
+            await using var client = new EdubaseClient();
+            client.ClientCredentials.UserName.UserName = "3741771"; // _configuration.EdubaseUsername;
+            client.ClientCredentials.UserName.Password = "rtqmHYnB";// _configuration.EdubasePassword;
+
+
+            List<Establishment> list = new List<Establishment>();
+            filter = filter ?? new EstablishmentFilter();
+            filter.Page = 0;
+            FindEstablishmentsResponse response = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
+            list.AddRange(response.Establishments);
+            for (int i = 1; i < response.PageCount; i++)
+            {
+                filter.Page = i;
+                List<Establishment> list2 = list;
+                IEnumerable<Establishment> establishments = (await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter))).Establishments;
+                list2.AddRange(establishments);
+            }
+
+            return list;
+        }      
     }
 }

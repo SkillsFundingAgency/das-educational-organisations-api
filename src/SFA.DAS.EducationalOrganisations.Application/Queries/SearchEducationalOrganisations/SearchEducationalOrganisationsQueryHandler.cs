@@ -25,7 +25,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
             {
                 return new SearchEducationalOrganisationsResult
                 {
-                    EducationalOrganisations = await _educationalOrganisationEntityRepository.SearchByName(request.SearchTerm)
+                    EducationalOrganisations = await _educationalOrganisationEntityRepository.SearchByName(request.SearchTerm, request.MaximumResults)
                 };
             }
 
@@ -37,7 +37,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
 
         private static bool IsSearchTermAReference(string searchTerm)
         {
-            return Regex.IsMatch(searchTerm, @"^[14]\d{5}$");
+            return Regex.IsMatch(searchTerm, @"^[14]\d{5}$"); // @"^[124]\d{4,5}$" TBC
         }
     }
 }

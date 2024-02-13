@@ -11,9 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EducationalOrganisa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EducationalOrganisations.Database", "SFA.DAS.EducationalOrganisations.Database\SFA.DAS.EducationalOrganisations.Database.csproj", "{BE43A560-3308-443D-A8EE-D2A5FCF0A853}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EducationalOrganisations.Application", "SFA.DAS.EducationalOrganisations.Application\SFA.DAS.EducationalOrganisations.Application.csproj", "{9633A2C0-C828-4345-BFB0-82822F5F677B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EducationalOrganisations.Application", "SFA.DAS.EducationalOrganisations.Application\SFA.DAS.EducationalOrganisations.Application.csproj", "{9633A2C0-C828-4345-BFB0-82822F5F677B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EducationalOrganisations.SoapClient", "SFA.DAS.EducationalOrganisations.SoapClient\SFA.DAS.EducationalOrganisations.SoapClient.csproj", "{A061FF5C-058F-4479-909D-B00316F3E260}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EducationalOrganisations.SoapClient", "SFA.DAS.EducationalOrganisations.SoapClient\SFA.DAS.EducationalOrganisations.SoapClient.csproj", "{A061FF5C-058F-4479-909D-B00316F3E260}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9EDBAFBE-3847-44BB-A7D5-24A810865DED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EducationalOrganisations.Domain.UnitTests", "Tests\SFA.DAS.EducationalOrganisations.Domain.UnitTests\SFA.DAS.EducationalOrganisations.Domain.UnitTests.csproj", "{BCEABAB2-CB90-4867-B05E-4CFCEBF67B94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +49,16 @@ Global
 		{A061FF5C-058F-4479-909D-B00316F3E260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A061FF5C-058F-4479-909D-B00316F3E260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A061FF5C-058F-4479-909D-B00316F3E260}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCEABAB2-CB90-4867-B05E-4CFCEBF67B94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCEABAB2-CB90-4867-B05E-4CFCEBF67B94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCEABAB2-CB90-4867-B05E-4CFCEBF67B94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCEABAB2-CB90-4867-B05E-4CFCEBF67B94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BCEABAB2-CB90-4867-B05E-4CFCEBF67B94} = {9EDBAFBE-3847-44BB-A7D5-24A810865DED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8A80FE58-564F-45D2-A94B-C5148C64EA3B}

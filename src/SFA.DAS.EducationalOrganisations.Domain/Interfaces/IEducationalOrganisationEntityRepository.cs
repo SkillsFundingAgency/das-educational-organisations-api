@@ -7,7 +7,7 @@ namespace SFA.DAS.EducationalOrganisations.Domain.Interfaces
         Task InsertMany(IEnumerable<EducationalOrganisationEntity> educationalOrganisationEntitys);
         Task<IEnumerable<EducationalOrganisationEntity>> GetAll();
         Task<EducationalOrganisationEntity?> GetById(Guid id);
-        Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm);
+        Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm, int maximumResults);
         Task<IEnumerable<EducationalOrganisationEntity>> SearchByUrn(string urn);
         void DeleteAll();
     }

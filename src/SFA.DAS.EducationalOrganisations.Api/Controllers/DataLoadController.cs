@@ -22,6 +22,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 
         [HttpPost]
         [Route("")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Import()
         {
             try
