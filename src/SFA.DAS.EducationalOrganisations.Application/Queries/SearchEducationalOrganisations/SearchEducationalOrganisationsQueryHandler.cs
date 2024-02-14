@@ -21,7 +21,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
         {
             _logger.LogInformation("Handling SearchEducationalOrganisationsQuery");
 
-            if (!IsSearchTermAReference(request.SearchTerm))
+            if (!IsSearchTermAReference(request.SearchTerm, TimeSpan.FromMilliseconds(1000)))
             {
                 return new SearchEducationalOrganisationsResult
                 {
@@ -35,11 +35,11 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
             };
         }
 
-        private bool IsSearchTermAReference(string searchTerm)
+        private bool IsSearchTermAReference(string searchTerm, TimeSpan timeout)
         {
             try
             {
-                return Regex.IsMatch(searchTerm, @"^[14]\d{5}$", RegexOptions.None, TimeSpan.FromMilliseconds(1000)); // @"^[124]\d{4,5}$" TBC
+                return Regex.IsMatch(searchTerm, @"^[14]\d{5}$", RegexOptions.None, timeout); // @"^[124]\d{4,5}$" TBC
             }
             catch (RegexMatchTimeoutException ex)
             {

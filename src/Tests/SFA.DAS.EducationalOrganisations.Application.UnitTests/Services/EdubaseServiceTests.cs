@@ -43,7 +43,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         {
             // Arrange
             _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
-                .ReturnsAsync(_response);
+                .ReturnsAsync(new FindEstablishmentsResponse());
 
             // Act
             var result = await _edubaseService.GetOrganisations();

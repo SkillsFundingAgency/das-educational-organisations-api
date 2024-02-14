@@ -70,14 +70,17 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
             filter = filter ?? new EstablishmentFilter();
             filter.Page = 0;
             FindEstablishmentsResponse response = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
-            list.AddRange(response.Establishments);
-            for (int i = 1; i < response.PageCount; i++)
+            if (response.Establishments != null)
             {
-                filter.Page = i;
-                List<Establishment> list2 = list;
-                IEnumerable<Establishment> establishments = (await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter))).Establishments;
-                list2.AddRange(establishments);
-            }
+                list.AddRange(response.Establishments);
+                for (int i = 1; i < response.PageCount; i++)
+                {
+                    filter.Page = i;
+                    List<Establishment> list2 = list;
+                    IEnumerable<Establishment> establishments = (await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter))).Establishments;
+                    list2.AddRange(establishments);
+                }
+            }           
 
             return list;
         }

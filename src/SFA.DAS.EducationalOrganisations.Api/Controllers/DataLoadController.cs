@@ -35,7 +35,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during data import");
-                return BadRequest(ex.Message); //test comment
+                return BadRequest(ex.Message); 
             }
         }
     }
