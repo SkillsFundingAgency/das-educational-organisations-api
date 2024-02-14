@@ -5419,7 +5419,7 @@ namespace EdubaseSoap
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
-    public partial class EdubaseClient : System.ServiceModel.ClientBase<EdubaseSoap.Edubase>, EdubaseSoap.Edubase
+    public partial class EdubaseClient : System.ServiceModel.ClientBase<EdubaseSoap.Edubase>, EdubaseSoap.Edubase, IEdubaseClient
     {
         
         /// <summary>

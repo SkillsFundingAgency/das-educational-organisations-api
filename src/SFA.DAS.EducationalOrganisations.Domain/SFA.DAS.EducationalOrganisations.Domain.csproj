@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.SoapClient\SFA.DAS.EducationalOrganisations.SoapClient.csproj" />
+    </ItemGroup>
+
 </Project>

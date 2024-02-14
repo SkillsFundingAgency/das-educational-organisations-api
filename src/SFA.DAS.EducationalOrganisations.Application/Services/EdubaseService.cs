@@ -1,6 +1,5 @@
 ﻿using EdubaseSoap;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EducationalOrganisations.Domain.Configuration;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
@@ -9,12 +8,13 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
     public class EdubaseService : IEdubaseService
     {
         private readonly ILogger<EdubaseService> _logger;
-        private readonly EducationalOrganisationsConfiguration _configuration;
+        private readonly IEdubaseClientFactory _factory;
 
-        public EdubaseService(ILogger<EdubaseService> logger, EducationalOrganisationsConfiguration configuration)
+
+        public EdubaseService(ILogger<EdubaseService> logger, IEdubaseClientFactory factory)
         {
             _logger = logger;
-            _configuration = configuration;
+            _factory = factory;
         }
 
         public async Task<ICollection<EducationalOrganisationEntity>> GetOrganisations()
@@ -62,12 +62,9 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
             }
         }
 
-        public async Task<List<Establishment>> FindEstablishmentsAsync(EstablishmentFilter filter)
+        private async Task<List<Establishment>> FindEstablishmentsAsync(EstablishmentFilter filter)
         {
-            await using var client = new EdubaseClient();
-            client.ClientCredentials.UserName.UserName = _configuration.EdubaseUsername;
-            client.ClientCredentials.UserName.Password = _configuration.EdubasePassword;
-
+            var client = _factory.Create();
 
             List<Establishment> list = new List<Establishment>();
             filter = filter ?? new EstablishmentFilter();
