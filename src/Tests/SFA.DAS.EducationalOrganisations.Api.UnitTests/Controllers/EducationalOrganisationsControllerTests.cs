@@ -70,11 +70,13 @@ namespace SFA.DAS.EducationalOrganisations.Api.UnitTests.Controllers
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new GetEducationalOrganisationByIdResult { EducationalOrganisation = null });
 
-            var controllerResult = await controller.GetById(id) as NotFoundResult;
+            var controllerResult = await controller.GetById(id) as ObjectResult;
 
             controllerResult.Should().NotBeNull();
 
-            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+            var model = controllerResult.Value as GetEducationalOrganisationByIdResponse;
+            model.EducationalOrganisation.Should().BeNull();
         }
 
         [Test, MoqAutoData]
@@ -113,11 +115,13 @@ namespace SFA.DAS.EducationalOrganisations.Api.UnitTests.Controllers
                     EducationalOrganisations = new List<EducationalOrganisationEntity>()
                 });
 
-            var controllerResult = await controller.Search(query.SearchTerm, query.MaximumResults) as NotFoundResult;
+            var controllerResult = await controller.Search(query.SearchTerm, query.MaximumResults) as ObjectResult;
 
             controllerResult.Should().NotBeNull();
 
-            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
+            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+            var model = controllerResult.Value as SearchEducationalOrganisationsResponse;
+            model.EducationalOrganisations.Count().Should().Be(0);
         }
     }
 }

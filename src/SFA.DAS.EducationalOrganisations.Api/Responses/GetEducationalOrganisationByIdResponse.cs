@@ -5,13 +5,13 @@ namespace SFA.DAS.EducationalOrganisations.Api.Responses
 {
     public class GetEducationalOrganisationByIdResponse
     {
-        public required EducationalOrganisationEntity EducationalOrganisation { get; set; }
+        public required EducationalOrganisationEntity? EducationalOrganisation { get; set; }
 
         public static explicit operator GetEducationalOrganisationByIdResponse(GetEducationalOrganisationByIdResult source)
-        {
+        {          
             return new GetEducationalOrganisationByIdResponse
             {
-                EducationalOrganisation = source.EducationalOrganisation ?? new EducationalOrganisationEntity()
+                EducationalOrganisation = source.EducationalOrganisation
             };
         }
     }

@@ -43,11 +43,6 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
                 Id = id
             });
 
-            if (result.EducationalOrganisation == null)
-            {
-                return NotFound();
-            }
-
             var response = (GetEducationalOrganisationByIdResponse)result;
 
             return Ok(response);
@@ -63,13 +58,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
             {
                 SearchTerm = searchTerm,
                 MaximumResults = maximumResults
-            });
-
-            if (result.EducationalOrganisations == null
-                || !result.EducationalOrganisations.Any())
-            {
-                return NotFound();
-            }
+            });        
 
             var response = (SearchEducationalOrganisationsResponse)result;
 
