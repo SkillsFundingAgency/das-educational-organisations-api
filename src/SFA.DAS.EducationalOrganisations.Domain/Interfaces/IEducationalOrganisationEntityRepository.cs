@@ -4,7 +4,7 @@ namespace SFA.DAS.EducationalOrganisations.Domain.Interfaces
 {
     public interface IEducationalOrganisationEntityRepository
     {
-        Task InsertMany(IEnumerable<EducationalOrganisationEntity> educationalOrganisationEntitys);
+        Task InsertMany(IEnumerable<EducationalOrganisationEntity> educationalOrganisationEntities);
         Task<IEnumerable<EducationalOrganisationEntity>> GetAll();
         Task<EducationalOrganisationEntity?> GetById(Guid id);
         Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm, int maximumResults);
