@@ -47,6 +47,12 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
                               .ToListAsync();
         }
 
+        public async Task<EducationalOrganisationEntity?> FindByUrn(string urn)
+        {
+            return await _dataContext.EducationalOrganisationEntities
+                              .Where(x => x.URN.Contains(urn)).FirstOrDefaultAsync();
+        }
+
         public void DeleteAll()
         {
             _dataContext.EducationalOrganisationEntities.RemoveRange(_dataContext.EducationalOrganisationEntities);

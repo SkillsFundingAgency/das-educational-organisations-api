@@ -1,6 +1,6 @@
-﻿using System.Text.RegularExpressions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EducationalOrganisations.Application.Infrastructure;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
 namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations
@@ -21,7 +21,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
         {
             _logger.LogInformation("Handling SearchEducationalOrganisationsQuery");
 
-            if (!IsSearchTermAReference(request.SearchTerm, TimeSpan.FromMilliseconds(1000)))
+            if (!SearchTermHelper.IsSearchTermAReference(request.SearchTerm, TimeSpan.FromMilliseconds(1000)))
             {
                 return new SearchEducationalOrganisationsResult
                 {
@@ -33,19 +33,6 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducational
             {
                 EducationalOrganisations = await _educationalOrganisationEntityRepository.SearchByUrn(request.SearchTerm)
             };
-        }
-
-        private bool IsSearchTermAReference(string searchTerm, TimeSpan timeout)
-        {
-            try
-            {
-                return Regex.IsMatch(searchTerm, @"^[14]\d{5}$", RegexOptions.None, timeout); // @"^[124]\d{4,5}$" TBC
-            }
-            catch (RegexMatchTimeoutException ex)
-            {
-                _logger.LogInformation(ex, "IsSearchTermAReference Regex timeout");
-                return false;
-            }
         }
     }
 }

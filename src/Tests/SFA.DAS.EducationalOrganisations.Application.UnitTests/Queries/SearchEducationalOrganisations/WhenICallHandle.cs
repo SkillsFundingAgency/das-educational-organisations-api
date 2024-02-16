@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -22,7 +21,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Queries.SearchE
         {
             var query = new SearchEducationalOrganisationsQuery
             {
-                SearchTerm = "10000",
+                SearchTerm = "searchnamehere",
                 MaximumResults = 500
             };
 
@@ -56,28 +55,6 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Queries.SearchE
             var result = await handler.Handle(query, CancellationToken.None);
 
             result.EducationalOrganisations.Should().BeEquivalentTo(repoResponse);
-        }
-
-        [Test, MoqAutoData]
-        public void IsSearchTermAReference_ShouldReturnFalse_WhenRegexTimeoutOccurs(
-           SearchEducationalOrganisationsQueryHandler handler)
-        {
-            // Arrange
-            var timeoutSearchTerm = "400000";
-            var isSearchTermAReferenceMethod = GetIsSearchTermAReferenceMethod();
-            var timeout = TimeSpan.FromMilliseconds(0.01);
-
-            // Act
-            var result = (bool)isSearchTermAReferenceMethod.Invoke(handler, new object[] { timeoutSearchTerm, timeout });
-
-            // Assert
-            result.Should().BeFalse();
-        }
-
-        private static MethodInfo GetIsSearchTermAReferenceMethod()
-        {
-            return typeof(SearchEducationalOrganisationsQueryHandler)
-                .GetMethod("IsSearchTermAReference", BindingFlags.Instance | BindingFlags.NonPublic);
         }
     }
 }

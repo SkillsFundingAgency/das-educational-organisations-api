@@ -8,7 +8,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Responses
         public required EducationalOrganisationEntity? EducationalOrganisation { get; set; }
 
         public static explicit operator GetEducationalOrganisationByIdResponse(GetEducationalOrganisationByIdResult source)
-        {          
+        {
             return new GetEducationalOrganisationByIdResponse
             {
                 EducationalOrganisation = source.EducationalOrganisation

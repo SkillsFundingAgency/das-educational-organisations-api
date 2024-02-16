@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EducationalOrganisations.Api.Responses;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById;
+using SFA.DAS.EducationalOrganisations.Application.Queries.GetLatestDetails;
 using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Domain.DTO;
+using SFA.DAS.EducationalOrganisations.Domain.Exceptions;
 
 namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 {
@@ -74,6 +76,40 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
             var results = await _mediator.Send(query);
 
             return Ok(results.OrganisationTypes);
+        }
+
+        [HttpGet]
+        [Route("GetLatestDetails")]
+        [ProducesResponseType(typeof(GetLatestDetailsResponse[]), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+        public async Task<IActionResult> GetLatestDetails(string identifier)
+        {
+            var query = new GetLatestDetailsQuery
+            {
+                Identifier = identifier
+            };
+
+            try
+            {
+                var result = await _mediator.Send(query);
+                var response = (GetLatestDetailsResponse)result;
+
+                return Ok(response);
+            }
+            catch (BadOrganisationIdentifierException e)
+            {
+                return BadRequest(e.Message);
+            }
+            catch (OrganisationNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
     }
 }

@@ -10,9 +10,11 @@ using SFA.DAS.EducationalOrganisations.Api.Responses;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetIdentifiableOrganisationTypes;
+using SFA.DAS.EducationalOrganisations.Application.Queries.GetLatestDetails;
 using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Domain.DTO;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
+using SFA.DAS.EducationalOrganisations.Domain.Exceptions;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EducationalOrganisations.Api.UnitTests.Controllers
@@ -145,6 +147,57 @@ namespace SFA.DAS.EducationalOrganisations.Api.UnitTests.Controllers
 
             controllerResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
             var model = controllerResult.Value as OrganisationType[];
+        }
+
+        [Test, MoqAutoData]
+        public async Task GetLatestDetails_ValidIdentifier_ReturnsOkResult(
+            [Frozen] Mock<IMediator> mockMediator,
+           [Greedy] EducationalOrganisationsController controller,
+           string identifier,
+           GetLatestDetailsResult result)
+        {
+            // Arrange
+            mockMediator.Setup(x => x.Send(It.IsAny<GetLatestDetailsQuery>(), It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(result);
+
+            // Act
+            var controllerResult = await controller.GetLatestDetails(identifier) as ObjectResult;
+
+            // Assert
+            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+            var model = controllerResult.Value as GetLatestDetailsResponse;
+        }
+
+        [Test, MoqAutoData]
+        public async Task GetLatestDetails_BadOrganisationIdentifierException_ReturnsBadResult(
+            [Frozen] Mock<IMediator> mockMediator,
+           [Greedy] EducationalOrganisationsController controller,
+           string identifier)
+        {
+            // Arrange
+            mockMediator.Setup(x => x.Send(It.IsAny<GetLatestDetailsQuery>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new BadOrganisationIdentifierException("Invalid identifier"));
+            // Act
+            var controllerResult = await controller.GetLatestDetails(identifier) as BadRequestObjectResult;
+
+            // Assert
+            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+        }
+
+        [Test, MoqAutoData]
+        public async Task GetLatestDetails_OrganisationNotFoundException_ReturnsBadResult(
+            [Frozen] Mock<IMediator> mockMediator,
+           [Greedy] EducationalOrganisationsController controller,
+           string identifier)
+        {
+            // Arrange
+            mockMediator.Setup(x => x.Send(It.IsAny<GetLatestDetailsQuery>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new OrganisationNotFoundException("Not Found"));
+            // Act
+            var controllerResult = await controller.GetLatestDetails(identifier) as NotFoundObjectResult;
+
+            // Assert
+            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.NotFound);
         }
     }
 }

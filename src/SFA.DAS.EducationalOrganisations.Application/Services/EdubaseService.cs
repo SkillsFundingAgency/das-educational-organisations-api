@@ -80,7 +80,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
                     IEnumerable<Establishment> establishments = (await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter))).Establishments;
                     list2.AddRange(establishments);
                 }
-            }           
+            }
 
             return list;
         }

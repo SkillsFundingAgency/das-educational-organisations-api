@@ -1,13 +1,10 @@
 ﻿using AutoFixture.NUnit3;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Application.Commands.ImportEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 using SFA.DAS.Testing.AutoFixture;
-using SFA.DAS.EducationalOrganisations.Application.Commands.ImportEducationalOrganisations;
-using Azure.Core;
 
 namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Commands.ImportEducationalOrganisations
 {
@@ -61,7 +58,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Commands.Import
             edubaseService
                 .Setup(m => m.GetOrganisations())
                 .ReturnsAsync(getAllOrganisationsResponse);
-            
+
             // Act
             await handler.Handle(command, CancellationToken.None);
 
