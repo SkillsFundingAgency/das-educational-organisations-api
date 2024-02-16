@@ -15,5 +15,6 @@ public static class AddServiceRegistrationExtension
         services.AddTransient<IEducationalOrganisationImportService, EducationalOrganisationImportService>();
 
         services.AddTransient<IEdubaseClientFactory, EdubaseClientFactory>();
+        services.AddTransient<IOrganisationTypeHelper, OrganisationTypeHelper>();
     }
 }

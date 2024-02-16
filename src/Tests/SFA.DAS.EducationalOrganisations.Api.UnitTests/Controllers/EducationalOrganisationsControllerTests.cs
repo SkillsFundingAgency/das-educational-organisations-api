@@ -9,7 +9,9 @@ using SFA.DAS.EducationalOrganisations.Api.Controllers;
 using SFA.DAS.EducationalOrganisations.Api.Responses;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById;
+using SFA.DAS.EducationalOrganisations.Application.Queries.GetIdentifiableOrganisationTypes;
 using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Domain.DTO;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -88,7 +90,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.UnitTests.Controllers
         {
             mockMediator
                 .Setup(mediator => mediator.Send(
-                    It.IsAny< SearchEducationalOrganisationsQuery>(),
+                    It.IsAny<SearchEducationalOrganisationsQuery>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(result);
 
@@ -122,6 +124,27 @@ namespace SFA.DAS.EducationalOrganisations.Api.UnitTests.Controllers
             controllerResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
             var model = controllerResult.Value as SearchEducationalOrganisationsResponse;
             model.EducationalOrganisations.Count().Should().Be(0);
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_Calls_GetIdentifiableOrganisationTypes_Returns_From_Mediator(
+              [Frozen] Mock<IMediator> mockMediator,
+              [Greedy] EducationalOrganisationsController controller,
+              GetIdentifiableOrganisationTypesResult result
+            )
+        {
+            mockMediator
+                .Setup(mediator => mediator.Send(
+                    It.IsAny<GetIdentifiableOrganisationTypesQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(result);
+
+            var controllerResult = await controller.GetIdentifiableOrganisationTypes() as ObjectResult;
+
+            controllerResult.Should().NotBeNull();
+
+            controllerResult.StatusCode.Should().Be((int)HttpStatusCode.OK);
+            var model = controllerResult.Value as OrganisationType[];
         }
     }
 }

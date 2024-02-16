@@ -4,6 +4,7 @@ using SFA.DAS.EducationalOrganisations.Api.Responses;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById;
 using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Domain.DTO;
 
 namespace SFA.DAS.EducationalOrganisations.Api.Controllers
 {
@@ -35,7 +36,6 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         [HttpGet]
         [Route("{id}")]
         [ProducesResponseType(typeof(GetEducationalOrganisationByIdResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(Guid id)
         {
             var result = await _mediator.Send(new GetEducationalOrganisationByIdQuery
@@ -51,18 +51,29 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         [HttpGet]
         [Route("search")]
         [ProducesResponseType(typeof(SearchEducationalOrganisationsResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Search([FromQuery] string searchTerm, [FromQuery] int maximumResults = 500)
         {
             var result = await _mediator.Send(new SearchEducationalOrganisationsQuery
             {
                 SearchTerm = searchTerm,
                 MaximumResults = maximumResults
-            });        
+            });
 
             var response = (SearchEducationalOrganisationsResponse)result;
 
             return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("IdentifiableOrganisationTypes")]
+        [ProducesResponseType(typeof(OrganisationType[]), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetIdentifiableOrganisationTypes()
+        {
+            var query = new GetIdentifiableOrganisationTypesQuery();
+
+            var results = await _mediator.Send(query);
+
+            return Ok(results.OrganisationTypes);
         }
     }
 }
