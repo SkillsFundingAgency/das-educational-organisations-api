@@ -79,7 +79,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         }
 
         [HttpGet]
-        [Route("GetLatestDetails")]
+        [Route("LatestDetails")]
         [ProducesResponseType(typeof(GetLatestDetailsResponse[]), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
