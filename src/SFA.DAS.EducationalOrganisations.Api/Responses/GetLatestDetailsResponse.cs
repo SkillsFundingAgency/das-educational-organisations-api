@@ -5,7 +5,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Responses
 {
     public class GetLatestDetailsResponse
     {
-        public EducationalOrganisationEntity EducationalOrganisation { get; set; }
+        public EducationalOrganisationEntity? EducationalOrganisation { get; set; }
 
         public static explicit operator GetLatestDetailsResponse(GetLatestDetailsResult source)
         {

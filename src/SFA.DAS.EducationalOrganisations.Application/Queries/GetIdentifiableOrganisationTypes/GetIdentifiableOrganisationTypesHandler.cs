@@ -5,7 +5,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Queries.GetIdentifiableOr
 {
     public class GetIdentifiableOrganisationTypesHandler : IRequestHandler<GetIdentifiableOrganisationTypesQuery, GetIdentifiableOrganisationTypesResult>
     {
-        private IOrganisationTypeHelper _organisationTypeHelper;
+        private readonly IOrganisationTypeHelper _organisationTypeHelper;
 
         public GetIdentifiableOrganisationTypesHandler(IOrganisationTypeHelper organisationTypeHelper)
         {
