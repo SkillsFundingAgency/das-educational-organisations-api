@@ -8,7 +8,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Infrastructure
         {
             try
             {
-                return Regex.IsMatch(searchTerm, @"^[124]\d{4,5}$", RegexOptions.None, timeout); // @"^[124]\d{4,5}$" TBC
+                return Regex.IsMatch(searchTerm, @"^[124]\d{4,5}$", RegexOptions.None, timeout);
             }
             catch
             {
