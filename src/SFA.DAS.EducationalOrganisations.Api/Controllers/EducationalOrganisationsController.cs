@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.EducationalOrganisations.Api.Responses;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetAllEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganisationById;
+using SFA.DAS.EducationalOrganisations.Application.Queries.GetIdentifiableOrganisationTypes;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetLatestDetails;
 using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
 using SFA.DAS.EducationalOrganisations.Domain.DTO;
