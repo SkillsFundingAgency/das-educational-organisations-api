@@ -26,10 +26,10 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
             return results;
         }
 
-        public void DeleteAll()
+        public async Task DeleteAll()
         {
             _dataContext.EducationalOrganisationImport.RemoveRange(_dataContext.EducationalOrganisationImport);
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

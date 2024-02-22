@@ -20,24 +20,22 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
             return await _educationalOrganisationImportRepository.GetAll();
         }
 
-        public async Task<bool> ImportDataIntoStaging(IEnumerable<EducationalOrganisationEntity> organisations)
+        public async Task ClearStagingData()
+        {
+            await _educationalOrganisationImportRepository.DeleteAll();
+        }
+
+        public async Task<bool> InsertDataIntoStaging(List<EducationalOrganisationImport> organisations)
         {
             try
             {
-                _logger.LogInformation("EducationalOrganisation Import - data into staging - started");
-
-                _educationalOrganisationImportRepository.DeleteAll();
-
-                await _educationalOrganisationImportRepository.InsertMany(organisations.Select(c => (EducationalOrganisationImport)c).ToList());
-
-                _logger.LogInformation("EducationalOrganisation Import - data into staging - finished");
-
+                await _educationalOrganisationImportRepository.InsertMany(organisations);
                 return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "EducationalOrganisation Import - an error occurred while trying to import data from LARS file");
-                throw;
+                return false;
             }
         }
     }

@@ -28,18 +28,11 @@ namespace SFA.DAS.EducationalOrganisations.Application.Commands.ImportEducationa
 
             _logger.LogInformation("Attempting GetAllEducationalOrganisationsQuery");
 
-            var organisations = await _edubaseService.GetOrganisations();
-
-            _logger.LogInformation("Retrieved educational organisations with TotalCount: {Count}", organisations.Count);
-
-            if (organisations.Count == 0) return Unit.Value;
-
-            //load data into Staging
-            await _educationalOrganisationImportService.ImportDataIntoStaging(organisations);
+            var stagingResult = await _edubaseService.PopulateStagingEducationalOrganisations();
+            if (!stagingResult) return Unit.Value;
 
             var latestDataFromStaging = await _educationalOrganisationImportService.GetAll();
 
-            //populate from Staging
             await _educationalOrganisationEntityService.PopulateDataFromStaging(latestDataFromStaging, importStartTime);
 
             return Unit.Value;

@@ -4,7 +4,7 @@ namespace SFA.DAS.EducationalOrganisations.Domain.Interfaces
 {
     public interface IEducationalOrganisationImportRepository
     {
-        void DeleteAll();
+        Task DeleteAll();
         Task<IEnumerable<EducationalOrganisationImport>> GetAll();
         Task InsertMany(IEnumerable<EducationalOrganisationImport> educationalOrganisationImports);
     }

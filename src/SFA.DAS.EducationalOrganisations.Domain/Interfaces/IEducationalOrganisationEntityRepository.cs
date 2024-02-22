@@ -10,6 +10,6 @@ namespace SFA.DAS.EducationalOrganisations.Domain.Interfaces
         Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm, int maximumResults);
         Task<IEnumerable<EducationalOrganisationEntity>> SearchByUrn(string urn);
         Task<EducationalOrganisationEntity?> FindByUrn(string urn);
-        void DeleteAll();
+        Task DeleteAll();
     }
 }

@@ -44,34 +44,42 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         }
 
         [Test]
-        public async Task ImportDataIntoStaging_ShouldImportDataAndReturnTrue()
+        public async Task ClearStagingData_ShouldCallDeleteAllMethodInRepository()
         {
-            // Arrange
-            var organisations = _fixture.CreateMany<EducationalOrganisationEntity>().ToList();
-
             // Act
-            var result = await _educationalOrganisationImportService.ImportDataIntoStaging(organisations);
+            await _educationalOrganisationImportService.ClearStagingData();
 
             // Assert
-            result.Should().BeTrue();
             _educationalOrganisationImportRepositoryMock.Verify(repo => repo.DeleteAll(), Times.Once);
-            _educationalOrganisationImportRepositoryMock.Verify(repo => repo.InsertMany(It.IsAny<List<EducationalOrganisationImport>>()), Times.Once);
         }
 
         [Test]
-        public void ImportDataIntoStaging_ShouldLogErrorAndRethrowException_WhenExceptionOccurs()
+        public async Task InsertDataIntoStaging_ShouldCallInsertManyMethodInRepository()
         {
             // Arrange
-            var organisations = _fixture.CreateMany<EducationalOrganisationEntity>().ToList();
-            var expectedException = new InvalidOperationException("Simulated error");
+            var organisations = _fixture.CreateMany<EducationalOrganisationImport>().ToList();
 
-            _educationalOrganisationImportRepositoryMock.Setup(repo => repo.DeleteAll()).Throws(expectedException);
-
-            // Act & Assert
-            Func<Task> act = async () => await _educationalOrganisationImportService.ImportDataIntoStaging(organisations);
+            // Act
+            var result = await _educationalOrganisationImportService.InsertDataIntoStaging(organisations);
 
             // Assert
-            act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Simulated error");
+            _educationalOrganisationImportRepositoryMock.Verify(repo => repo.InsertMany(organisations), Times.Once);
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task InsertDataIntoStaging_ShouldReturnFalse_WhenRepositoryThrowsException()
+        {
+            // Arrange
+            var organisations = _fixture.CreateMany<EducationalOrganisationImport>().ToList();
+            var exception = new Exception("Simulated repository exception");
+            _educationalOrganisationImportRepositoryMock.Setup(repo => repo.InsertMany(organisations)).Throws(exception);
+
+            // Act
+            var result = await _educationalOrganisationImportService.InsertDataIntoStaging(organisations);
+
+            // Assert
+            result.Should().BeFalse();
         }
     }
 }

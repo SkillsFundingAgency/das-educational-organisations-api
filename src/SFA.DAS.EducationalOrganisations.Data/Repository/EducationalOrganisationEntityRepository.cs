@@ -53,10 +53,10 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
                               .Where(x => x.URN.Contains(urn)).FirstOrDefaultAsync();
         }
 
-        public void DeleteAll()
+        public async Task DeleteAll()
         {
             _dataContext.EducationalOrganisationEntities.RemoveRange(_dataContext.EducationalOrganisationEntities);
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

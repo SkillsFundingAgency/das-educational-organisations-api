@@ -28,7 +28,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
                 {
                     _logger.LogInformation("Educational Organisation data load from staging - started");
 
-                    _educationalOrganisationEntityRepository.DeleteAll();
+                    await _educationalOrganisationEntityRepository.DeleteAll();
 
                     await _educationalOrganisationEntityRepository.InsertMany(importOrgs
                             .Select(c => (EducationalOrganisationEntity)c).ToList());

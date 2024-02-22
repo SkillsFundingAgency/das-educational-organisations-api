@@ -1,10 +1,12 @@
-﻿using AutoFixture;
+﻿using System.Reflection;
+using AutoFixture;
 using EdubaseSoap;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EducationalOrganisations.Application.Services;
+using SFA.DAS.EducationalOrganisations.Domain.Entities;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
 namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
@@ -15,6 +17,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         private Mock<ILogger<EdubaseService>> _loggerMock;
         private Mock<IEdubaseClient> _edubaseClientMock;
         private Mock<IEdubaseClientFactory> _edubaseClientFactoryMock;
+        private Mock<IEducationalOrganisationImportService> _educationalOrganisationImportService;
         private EdubaseService _edubaseService;
         private Fixture _fixture;
         private FindEstablishmentsResponse _response;
@@ -24,6 +27,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         {
             _loggerMock = new Mock<ILogger<EdubaseService>>();
             _edubaseClientMock = new Mock<IEdubaseClient>();
+            _educationalOrganisationImportService = new Mock<IEducationalOrganisationImportService>();
             _edubaseClientFactoryMock = new Mock<IEdubaseClientFactory>();
             _edubaseClientFactoryMock.Setup(factory => factory.Create()).Returns(_edubaseClientMock.Object);
 
@@ -35,47 +39,80 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
                 .With(x => x.Establishments, [.. establishments])
                 .Create();
 
-            _edubaseService = new EdubaseService(_loggerMock.Object, _edubaseClientFactoryMock.Object);
+            _edubaseService = new EdubaseService(_loggerMock.Object, _edubaseClientFactoryMock.Object, _educationalOrganisationImportService.Object);
         }
 
         [Test]
-        public async Task GetOrganisations_ShouldReturnEmptyList_WhenNoEstablishments()
+        public async Task PopulateStagingEducationalOrganisations_ShouldReturnFalse_WhenNoEstablishments()
         {
             // Arrange
             _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
                 .ReturnsAsync(new FindEstablishmentsResponse());
 
             // Act
-            var result = await _edubaseService.GetOrganisations();
+            var result = await _edubaseService.PopulateStagingEducationalOrganisations();
 
             // Assert
-            result.Should().BeEmpty();
+            result.Should().Be(false);
         }
 
         [Test]
-        public void GetOrganisations_ShouldThrowException_WhenEdubaseApiFails()
+        public async Task PopulateStagingEducationalOrganisations_ShouldReturnFalse_WhenNullResponse()
         {
             // Arrange
             _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
-                .ThrowsAsync(new Exception("Simulated error"));
+                .ReturnsAsync((FindEstablishmentsResponse)null);
 
-            // Act & Assert
-            Func<Task> act = async () => await _edubaseService.GetOrganisations();
-            act.Should().ThrowAsync<Exception>();
+            // Act
+            var result = await _edubaseService.PopulateStagingEducationalOrganisations();
+
+            // Assert
+            result.Should().BeFalse();
         }
 
         [Test]
-        public async Task GetOrganisations_ShouldReturnMappedOrganisations_WhenEstablishmentsExist()
+        public async Task PopulateStagingEducationalOrganisations_ShouldReturnTrue_WhenEstablishmentsFound()
         {
             // Arrange
             _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
                 .ReturnsAsync(_response);
 
             // Act
-            var result = await _edubaseService.GetOrganisations();
+            var result = await _edubaseService.PopulateStagingEducationalOrganisations();
 
             // Assert
-            result.Should().HaveCount(_response.Establishments.Count);
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public async Task FindEstablishmentsAndInsertIntoStaging_ShouldInsertDataIntoStaging()
+        {
+            // Arrange
+            var filter = new EstablishmentFilter();
+            _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
+                .ReturnsAsync(_response);
+
+            // Act
+            await _edubaseService.PopulateStagingEducationalOrganisations();
+
+            // Assert
+            _educationalOrganisationImportService.Verify(service => service.InsertDataIntoStaging(It.IsAny<List<EducationalOrganisationImport>>()), Times.Once);
+        }
+
+        [Test]
+        public async Task InsertIntoDatabaseAsync_ShouldCallInsertDataIntoStagingMethod()
+        {
+            // Arrange
+            var establishments = _fixture.CreateMany<Establishment>().ToList();
+
+            var insertIntoDatabaseAsyncMethod = typeof(EdubaseService)
+                .GetMethod("InsertIntoDatabaseAsync", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            // Act
+            await (Task)insertIntoDatabaseAsyncMethod.Invoke(_edubaseService, new object[] { establishments });
+
+            // Assert
+            _educationalOrganisationImportService.Verify(service => service.InsertDataIntoStaging(It.IsAny<List<EducationalOrganisationImport>>()), Times.Once);
         }
     }
 }

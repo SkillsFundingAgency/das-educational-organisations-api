@@ -4,7 +4,8 @@ namespace SFA.DAS.EducationalOrganisations.Domain.Interfaces
 {
     public interface IEducationalOrganisationImportService
     {
-        Task<bool> ImportDataIntoStaging(IEnumerable<EducationalOrganisationEntity> organisations);
+        Task<bool> InsertDataIntoStaging(List<EducationalOrganisationImport> organisations);
         Task<IEnumerable<EducationalOrganisationImport>> GetAll();
+        Task ClearStagingData();
     }
 }

@@ -9,15 +9,17 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
     {
         private readonly ILogger<EdubaseService> _logger;
         private readonly IEdubaseClientFactory _factory;
+        private readonly IEducationalOrganisationImportService _educationalOrganisationImportService;
 
-
-        public EdubaseService(ILogger<EdubaseService> logger, IEdubaseClientFactory factory)
+        public EdubaseService(ILogger<EdubaseService> logger, IEdubaseClientFactory factory,
+                IEducationalOrganisationImportService educationalOrganisationImportService)
         {
             _logger = logger;
             _factory = factory;
+            _educationalOrganisationImportService = educationalOrganisationImportService;
         }
 
-        public async Task<ICollection<EducationalOrganisationEntity>> GetOrganisations()
+        public async Task<bool> PopulateStagingEducationalOrganisations()
         {
             var filter = new EstablishmentFilter
             {
@@ -37,23 +39,15 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
 
             try
             {
-                var establishments = await FindEstablishmentsAsync(filter);
+                _logger.LogInformation("EducationalOrganisation Import - data into staging - started");
 
-                if (establishments == null || establishments.Count == 0)
-                    return Array.Empty<EducationalOrganisationEntity>();
+                await _educationalOrganisationImportService.ClearStagingData();
 
-                return establishments.Select(x => new EducationalOrganisationEntity
-                {
-                    Name = x.EstablishmentName,
-                    EducationalType = x.TypeOfEstablishment?.DisplayName ?? string.Empty,
-                    AddressLine1 = x.Street,
-                    AddressLine2 = x.Locality,
-                    AddressLine3 = x.Address3,
-                    Town = x.Town,
-                    County = x.County?.DisplayName ?? string.Empty,
-                    PostCode = x.Postcode,
-                    URN = x.URN.ToString()
-                }).ToArray();
+                var result = await FindEstablishmentsAndInsertIntoStaging(filter);
+
+                _logger.LogInformation("EducationalOrganisation Import - data into staging - finished");
+
+                return result;
             }
             catch (Exception ex)
             {
@@ -62,27 +56,60 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
             }
         }
 
-        private async Task<List<Establishment>> FindEstablishmentsAsync(EstablishmentFilter filter)
+        private async Task<bool> FindEstablishmentsAndInsertIntoStaging(EstablishmentFilter filter)
         {
             var client = _factory.Create();
 
-            List<Establishment> list = new List<Establishment>();
-            filter = filter ?? new EstablishmentFilter();
+            int batchSize = 100;
+            List<Establishment> allRecords = [];
+            filter ??= new EstablishmentFilter();
             filter.Page = 0;
-            FindEstablishmentsResponse response = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
-            if (response.Establishments != null)
+
+            for (; ; filter.Page++)
             {
-                list.AddRange(response.Establishments);
-                for (int i = 1; i < response.PageCount; i++)
+                FindEstablishmentsResponse response = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
+               
+                if (response?.Establishments == null) return false;
+
+                allRecords.AddRange(response.Establishments);
+
+                if (allRecords.Count >= batchSize)
                 {
-                    filter.Page = i;
-                    List<Establishment> list2 = list;
-                    IEnumerable<Establishment> establishments = (await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter))).Establishments;
-                    list2.AddRange(establishments);
+                    await InsertIntoDatabaseAsync(allRecords);
+
+                    allRecords.Clear();
+                }
+
+                if (response.PageCount <= filter.Page)
+                {
+                    break;
                 }
             }
 
-            return list;
+            if (allRecords.Count > 0)
+            {
+                await InsertIntoDatabaseAsync(allRecords);
+            }
+
+            return true;
+        }
+
+        private async Task InsertIntoDatabaseAsync(List<Establishment> establishments)
+        {
+            var organisations = establishments.Select(x => new EducationalOrganisationEntity
+            {
+                Name = x.EstablishmentName,
+                EducationalType = x.TypeOfEstablishment?.DisplayName ?? string.Empty,
+                AddressLine1 = x.Street,
+                AddressLine2 = x.Locality,
+                AddressLine3 = x.Address3,
+                Town = x.Town,
+                County = x.County?.DisplayName ?? string.Empty,
+                PostCode = x.Postcode,
+                URN = x.URN.ToString()
+            }).ToArray();
+
+            await _educationalOrganisationImportService.InsertDataIntoStaging(organisations.Select(c => (EducationalOrganisationImport)c).ToList());
         }
     }
 }

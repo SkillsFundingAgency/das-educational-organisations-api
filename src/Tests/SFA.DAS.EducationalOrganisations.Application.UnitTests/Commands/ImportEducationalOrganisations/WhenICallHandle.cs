@@ -21,13 +21,9 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Commands.Import
            ImportEducationalOrganisationsCommandHandler handler)
         {
             edubaseService
-                .Setup(m => m.GetOrganisations())
-                .ReturnsAsync(getAllOrganisationsResponse);
-
-            edOrgImportService
-             .Setup(m => m.ImportDataIntoStaging(getAllOrganisationsResponse))
-             .ReturnsAsync(true);
-
+                .Setup(m => m.PopulateStagingEducationalOrganisations())
+                .ReturnsAsync(true);
+            
             edOrgImportService
              .Setup(m => m.GetAll())
              .ReturnsAsync(getAllOrganisationImportsResponse);
@@ -39,8 +35,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Commands.Import
             // Act
             await handler.Handle(command, CancellationToken.None);
 
-            edubaseService.Verify(x => x.GetOrganisations(), Times.Once);
-            edOrgImportService.Verify(x => x.ImportDataIntoStaging(getAllOrganisationsResponse), Times.Once);
+            edubaseService.Verify(x => x.PopulateStagingEducationalOrganisations(), Times.Once);
             edOrgImportService.Verify(x => x.GetAll(), Times.Once);
             edOrgService.Verify(x => x.PopulateDataFromStaging(getAllOrganisationImportsResponse, It.IsAny<DateTime>()), Times.Once);
         }
@@ -50,20 +45,17 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Commands.Import
            [Frozen] Mock<IEducationalOrganisationEntityService> edOrgService,
            [Frozen] Mock<IEducationalOrganisationImportService> edOrgImportService,
            [Frozen] Mock<IEdubaseService> edubaseService,
-           ICollection<EducationalOrganisationEntity> getAllOrganisationsResponse,
            ImportEducationalOrganisationsCommand command,
            ImportEducationalOrganisationsCommandHandler handler)
         {
-            getAllOrganisationsResponse.Clear();
             edubaseService
-                .Setup(m => m.GetOrganisations())
-                .ReturnsAsync(getAllOrganisationsResponse);
+                .Setup(m => m.PopulateStagingEducationalOrganisations())
+                .ReturnsAsync(false);
 
             // Act
             await handler.Handle(command, CancellationToken.None);
 
-            edubaseService.Verify(x => x.GetOrganisations(), Times.Once);
-            edOrgImportService.Verify(x => x.ImportDataIntoStaging(It.IsAny<IEnumerable<EducationalOrganisationEntity>>()), Times.Never);
+            edubaseService.Verify(x => x.PopulateStagingEducationalOrganisations(), Times.Once);
             edOrgImportService.Verify(x => x.GetAll(), Times.Never);
             edOrgService.Verify(x => x.PopulateDataFromStaging(It.IsAny<IEnumerable<EducationalOrganisationImport>>(), It.IsAny<DateTime>()), Times.Never);
         }

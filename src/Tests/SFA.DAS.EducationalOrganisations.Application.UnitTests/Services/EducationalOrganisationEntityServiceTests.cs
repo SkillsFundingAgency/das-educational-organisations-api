@@ -65,12 +65,13 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         }
 
         [Test]
-        public void PopulateDataFromStaging_ShouldLogErrorAndRethrowException_WhenExceptionOccurs()
+        public void PopulateDataFromStaging_ShouldThrowException_WhenExceptionOccurs()
         {
             // Arrange
+            var errorMessage = "errorMessage";
             var importOrgs = _fixture.CreateMany<EducationalOrganisationImport>().ToList();
             var importStartTime = DateTime.UtcNow;
-            var expectedException = new InvalidOperationException("Simulated error");
+            var expectedException = new InvalidOperationException(errorMessage);
 
             _educationalOrganisationEntityRepositoryMock.Setup(repo => repo.DeleteAll()).Throws(expectedException);
 
@@ -78,7 +79,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
             Func<Task> act = async () => await _educationalOrganisationEntityService.PopulateDataFromStaging(importOrgs, importStartTime);
 
             // Assert
-            act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Simulated error");
+            act.Should().ThrowAsync<InvalidOperationException>().WithMessage(errorMessage);
         }
     }
 }
