@@ -29,7 +29,7 @@ namespace SFA.DAS.EducationalOrganisations.Data.UnitTests.Repository
             // Arrange
             var entities = _fixture.CreateMany<EducationalOrganisationImport>();
 
-            _repository.DeleteAll();
+            await _repository.DeleteAll();
 
             // Act
             await _repository.InsertMany(entities);
@@ -53,10 +53,10 @@ namespace SFA.DAS.EducationalOrganisations.Data.UnitTests.Repository
         }
 
         [Test]
-        public void DeleteAll_ShouldRemoveAllEntitiesAndSaveChanges()
+        public async Task DeleteAll_ShouldRemoveAllEntitiesAndSaveChanges()
         {
             // Act
-            _repository.DeleteAll();
+            await _repository.DeleteAll();
 
             _DB.EducationalOrganisationImport.Should().HaveCount(0);
         }

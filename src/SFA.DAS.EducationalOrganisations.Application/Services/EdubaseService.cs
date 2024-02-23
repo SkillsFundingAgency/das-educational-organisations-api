@@ -8,15 +8,17 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
     public class EdubaseService : IEdubaseService
     {
         private readonly ILogger<EdubaseService> _logger;
-        private readonly IEdubaseClientFactory _factory;
+        private readonly IEdubaseSoapService _edubaseSoapService;
         private readonly IEducationalOrganisationImportService _educationalOrganisationImportService;
 
-        public EdubaseService(ILogger<EdubaseService> logger, IEdubaseClientFactory factory,
+        public EdubaseService(
+                ILogger<EdubaseService> logger, 
+                IEdubaseSoapService edubaseSoapService,
                 IEducationalOrganisationImportService educationalOrganisationImportService)
         {
             _logger = logger;
-            _factory = factory;
             _educationalOrganisationImportService = educationalOrganisationImportService;
+            _edubaseSoapService = edubaseSoapService;
         }
 
         public async Task<bool> PopulateStagingEducationalOrganisations()
@@ -58,33 +60,33 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
 
         private async Task<bool> FindEstablishmentsAndInsertIntoStaging(EstablishmentFilter filter)
         {
-            var client = _factory.Create();
-
             int batchSize = 100;
             List<Establishment> allRecords = [];
             filter ??= new EstablishmentFilter();
             filter.Page = 0;
 
-            for (; ; filter.Page++)
+            FindEstablishmentsResponse response = new();
+
+            do
             {
-                FindEstablishmentsResponse response = await client.FindEstablishmentsAsync(new FindEstablishmentsRequest(filter));
-               
-                if (response?.Establishments == null) return false;
+                response = await _edubaseSoapService.FindEstablishmentsAsync(filter);
+
+                if (response?.Establishments == null)
+                {
+                    return false;
+                }
 
                 allRecords.AddRange(response.Establishments);
 
                 if (allRecords.Count >= batchSize)
                 {
                     await InsertIntoDatabaseAsync(allRecords);
-
                     allRecords.Clear();
                 }
 
-                if (response.PageCount <= filter.Page)
-                {
-                    break;
-                }
-            }
+                filter.Page++;
+
+            } while (filter.Page < response.PageCount);           
 
             if (allRecords.Count > 0)
             {
@@ -93,7 +95,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
 
             return true;
         }
-
+     
         private async Task InsertIntoDatabaseAsync(List<Establishment> establishments)
         {
             var organisations = establishments.Select(x => new EducationalOrganisationEntity

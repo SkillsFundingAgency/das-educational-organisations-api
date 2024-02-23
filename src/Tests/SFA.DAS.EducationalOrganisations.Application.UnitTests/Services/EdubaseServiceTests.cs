@@ -15,8 +15,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
     public class EdubaseServiceTests
     {
         private Mock<ILogger<EdubaseService>> _loggerMock;
-        private Mock<IEdubaseClient> _edubaseClientMock;
-        private Mock<IEdubaseClientFactory> _edubaseClientFactoryMock;
+        private Mock<IEdubaseSoapService> _edubaseSoapServiceMock;
         private Mock<IEducationalOrganisationImportService> _educationalOrganisationImportService;
         private EdubaseService _edubaseService;
         private Fixture _fixture;
@@ -26,10 +25,8 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         public void Setup()
         {
             _loggerMock = new Mock<ILogger<EdubaseService>>();
-            _edubaseClientMock = new Mock<IEdubaseClient>();
+            _edubaseSoapServiceMock = new Mock<IEdubaseSoapService>();
             _educationalOrganisationImportService = new Mock<IEducationalOrganisationImportService>();
-            _edubaseClientFactoryMock = new Mock<IEdubaseClientFactory>();
-            _edubaseClientFactoryMock.Setup(factory => factory.Create()).Returns(_edubaseClientMock.Object);
 
             _fixture = new Fixture();
 
@@ -39,14 +36,14 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
                 .With(x => x.Establishments, [.. establishments])
                 .Create();
 
-            _edubaseService = new EdubaseService(_loggerMock.Object, _edubaseClientFactoryMock.Object, _educationalOrganisationImportService.Object);
+            _edubaseService = new EdubaseService(_loggerMock.Object, _edubaseSoapServiceMock.Object, _educationalOrganisationImportService.Object);
         }
 
         [Test]
         public async Task PopulateStagingEducationalOrganisations_ShouldReturnFalse_WhenNoEstablishments()
         {
             // Arrange
-            _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
+            _edubaseSoapServiceMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<EstablishmentFilter>()))
                 .ReturnsAsync(new FindEstablishmentsResponse());
 
             // Act
@@ -60,7 +57,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         public async Task PopulateStagingEducationalOrganisations_ShouldReturnFalse_WhenNullResponse()
         {
             // Arrange
-            _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
+            _edubaseSoapServiceMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<EstablishmentFilter>()))
                 .ReturnsAsync((FindEstablishmentsResponse)null);
 
             // Act
@@ -74,7 +71,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         public async Task PopulateStagingEducationalOrganisations_ShouldReturnTrue_WhenEstablishmentsFound()
         {
             // Arrange
-            _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
+            _edubaseSoapServiceMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<EstablishmentFilter>()))
                 .ReturnsAsync(_response);
 
             // Act
@@ -89,7 +86,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.UnitTests.Services
         {
             // Arrange
             var filter = new EstablishmentFilter();
-            _edubaseClientMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<FindEstablishmentsRequest>()))
+            _edubaseSoapServiceMock.Setup(client => client.FindEstablishmentsAsync(It.IsAny<EstablishmentFilter>()))
                 .ReturnsAsync(_response);
 
             // Act

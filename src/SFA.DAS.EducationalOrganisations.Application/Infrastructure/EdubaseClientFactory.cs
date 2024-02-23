@@ -18,6 +18,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Infrastructure
             var client = new EdubaseClient();
             client.ClientCredentials.UserName.UserName = _configuration.EdubaseUsername;
             client.ClientCredentials.UserName.Password = _configuration.EdubasePassword;
+            client.InnerChannel.OperationTimeout = TimeSpan.FromMinutes(5);
 
             return client;
         }

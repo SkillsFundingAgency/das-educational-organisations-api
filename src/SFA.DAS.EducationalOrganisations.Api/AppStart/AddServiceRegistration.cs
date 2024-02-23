@@ -11,6 +11,8 @@ public static class AddServiceRegistrationExtension
     {
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllEducationalOrganisationsQuery).Assembly));
         services.AddTransient<IEdubaseService, EdubaseService>();
+        services.AddTransient<IEdubaseSoapService, EdubaseSoapService>();
+
         services.AddTransient<IEducationalOrganisationEntityService, EducationalOrganisationEntityService>();
         services.AddTransient<IEducationalOrganisationImportService, EducationalOrganisationImportService>();
 
