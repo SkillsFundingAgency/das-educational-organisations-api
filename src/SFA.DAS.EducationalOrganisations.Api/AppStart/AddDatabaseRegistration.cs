@@ -11,7 +11,6 @@ public static class DatabaseExtensions
 {
     public static void AddDatabaseRegistration(this IServiceCollection services, EducationalOrganisationsConfiguration config, string? environmentName)
     {
-        environmentName = "TEST2";
         services.AddHttpContextAccessor();
         if (environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
         {
