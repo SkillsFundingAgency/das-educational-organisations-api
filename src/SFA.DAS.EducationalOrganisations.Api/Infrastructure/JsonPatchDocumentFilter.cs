@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace SFA.DAS.EducationalOrganisations.Api.Infrastructure;
 
-public class JsonPatchDocumentFilter: IDocumentFilter
+public class JsonPatchDocumentFilter : IDocumentFilter
 {
     public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
     {
