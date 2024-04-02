@@ -23,7 +23,6 @@ public static class DatabaseExtensions
         }
         else
         {
-            services.AddSingleton(new AzureServiceTokenProvider());
             services.AddDbContext<EducationalOrganisationDataContext>(ServiceLifetime.Transient);
         }
 
