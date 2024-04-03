@@ -27,5 +27,7 @@ public static class AddServiceRegistrationExtension
         });
 
         services.AddApplicationInsightsTelemetry();
+
+
     }
 }

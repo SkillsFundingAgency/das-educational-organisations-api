@@ -6,6 +6,7 @@ using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganis
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetIdentifiableOrganisationTypes;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetLatestDetails;
 using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
+using SFA.DAS.EducationalOrganisations.Domain.Configuration;
 using SFA.DAS.EducationalOrganisations.Domain.DTO;
 using SFA.DAS.EducationalOrganisations.Domain.Exceptions;
 
@@ -17,11 +18,17 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
     public class EducationalOrganisationsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<EducationalOrganisationsController> _logger;
+        private readonly IConfiguration _configuration;
+
 
         public EducationalOrganisationsController(
-            IMediator mediator)
+            IMediator mediator, ILogger<EducationalOrganisationsController> logger,
+            IConfiguration configuration)
         {
             _mediator = mediator;
+            _logger = logger;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -56,6 +63,15 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         [ProducesResponseType(typeof(SearchEducationalOrganisationsResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Search([FromQuery] string searchTerm, [FromQuery] int maximumResults = 500)
         {
+            // Access configuration settings
+            var settingValue = _configuration["DatabaseConnectionString"];
+
+            var educationOrganisationsConfiguration = _configuration
+            .GetSection(nameof(EducationalOrganisationsConfiguration))
+            .Get<EducationalOrganisationsConfiguration>();
+
+            _logger.LogInformation("DbString {conn}", educationOrganisationsConfiguration?.DatabaseConnectionString);
+
             var result = await _mediator.Send(new SearchEducationalOrganisationsQuery
             {
                 SearchTerm = searchTerm,
