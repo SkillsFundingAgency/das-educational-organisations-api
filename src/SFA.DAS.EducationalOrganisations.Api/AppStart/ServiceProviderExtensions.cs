@@ -1,4 +1,4 @@
-﻿using System;
+﻿namespace SFA.DAS.EducationalOrganisations.Api.AppStart;
 
 public static class ServiceProviderExtensions
 {
