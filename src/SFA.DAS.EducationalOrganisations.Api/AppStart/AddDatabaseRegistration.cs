@@ -12,14 +12,6 @@ public static class DatabaseExtensions
 {
     public static void AddDatabaseRegistration(this IServiceCollection services, EducationalOrganisationsConfiguration config, string? environmentName)
     {
-        var serviceProvider = services.BuildServiceProvider();
-
-        var logger = serviceProvider.GetLogger(nameof(Program));
-
-        logger.LogInformation("Logger added in AddDatabaseRegistration");
-        logger.LogInformation("EnvironmentName: {environmentName}", environmentName);
-        logger.LogInformation("EnvironmentName: {DatabaseConnectionString}", config.DatabaseConnectionString);
-
         services.AddHttpContextAccessor();
         if (environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
         {

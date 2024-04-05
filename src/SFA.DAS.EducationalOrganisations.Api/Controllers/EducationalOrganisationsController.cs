@@ -63,14 +63,9 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         [ProducesResponseType(typeof(SearchEducationalOrganisationsResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Search([FromQuery] string searchTerm, [FromQuery] int maximumResults = 500)
         {
-            // Access configuration settings
-            var settingValue = _configuration["DatabaseConnectionString"];
+            var settingValue = _configuration["EnvironmentName"];
 
-            var educationOrganisationsConfiguration = _configuration
-            .GetSection(nameof(EducationalOrganisationsConfiguration))
-            .Get<EducationalOrganisationsConfiguration>();
-
-            _logger.LogInformation("DbString {conn}", educationOrganisationsConfiguration?.DatabaseConnectionString);
+            _logger.LogInformation("EnvironmentName in controller {settingValue}", settingValue);
 
             var result = await _mediator.Send(new SearchEducationalOrganisationsQuery
             {
