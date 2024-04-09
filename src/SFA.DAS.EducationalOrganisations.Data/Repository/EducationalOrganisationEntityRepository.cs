@@ -1,6 +1,4 @@
-﻿using Castle.Core.Logging;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
@@ -9,11 +7,9 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
     public class EducationalOrganisationEntityRepository : IEducationalOrganisationEntityRepository
     {
         private readonly EducationalOrganisationDataContext _dataContext;
-        private readonly ILogger<EducationalOrganisationEntityRepository> _logger;
 
-        public EducationalOrganisationEntityRepository(EducationalOrganisationDataContext dataContext, ILogger<EducationalOrganisationEntityRepository> logger)
+        public EducationalOrganisationEntityRepository(EducationalOrganisationDataContext dataContext)
         {
-            _logger = logger;
             _dataContext = dataContext;
         }
 
@@ -37,9 +33,6 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
 
         public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm, int maximumResults)
         {
-            var connString = _dataContext.Database.GetConnectionString();
-            _logger.LogInformation("ConnectionString in repo: {conn}", connString);
-
             var organisations = await _dataContext.EducationalOrganisationEntities
                               .Where(x => x.Name.Contains(searchTerm))
                               .ToListAsync();

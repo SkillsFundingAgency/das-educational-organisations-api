@@ -6,7 +6,6 @@ using SFA.DAS.EducationalOrganisations.Application.Queries.GetEducationalOrganis
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetIdentifiableOrganisationTypes;
 using SFA.DAS.EducationalOrganisations.Application.Queries.GetLatestDetails;
 using SFA.DAS.EducationalOrganisations.Application.Queries.SearchEducationalOrganisations;
-using SFA.DAS.EducationalOrganisations.Domain.Configuration;
 using SFA.DAS.EducationalOrganisations.Domain.DTO;
 using SFA.DAS.EducationalOrganisations.Domain.Exceptions;
 
@@ -19,8 +18,6 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILogger<EducationalOrganisationsController> _logger;
-        private readonly IConfiguration _configuration;
-
 
         public EducationalOrganisationsController(
             IMediator mediator, ILogger<EducationalOrganisationsController> logger,
@@ -28,7 +25,6 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         {
             _mediator = mediator;
             _logger = logger;
-            _configuration = configuration;
         }
 
         [HttpGet]
@@ -62,11 +58,7 @@ namespace SFA.DAS.EducationalOrganisations.Api.Controllers
         [Route("search")]
         [ProducesResponseType(typeof(SearchEducationalOrganisationsResponse), StatusCodes.Status200OK)]
         public async Task<IActionResult> Search([FromQuery] string searchTerm, [FromQuery] int maximumResults = 500)
-        {
-            var settingValue = _configuration["EnvironmentName"];
-
-            _logger.LogInformation("EnvironmentName in controller {settingValue}", settingValue);
-
+        {          
             var result = await _mediator.Send(new SearchEducationalOrganisationsQuery
             {
                 SearchTerm = searchTerm,
