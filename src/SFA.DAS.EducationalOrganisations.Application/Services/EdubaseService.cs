@@ -12,7 +12,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
         private readonly IEducationalOrganisationImportService _educationalOrganisationImportService;
 
         public EdubaseService(
-                ILogger<EdubaseService> logger, 
+                ILogger<EdubaseService> logger,
                 IEdubaseSoapService edubaseSoapService,
                 IEducationalOrganisationImportService educationalOrganisationImportService)
         {
@@ -86,7 +86,7 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
 
                 filter.Page++;
 
-            } while (filter.Page < response.PageCount);           
+            } while (filter.Page < response.PageCount);
 
             if (allRecords.Count > 0)
             {
@@ -95,23 +95,28 @@ namespace SFA.DAS.EducationalOrganisations.Application.Services
 
             return true;
         }
-     
+
         private async Task InsertIntoDatabaseAsync(List<Establishment> establishments)
         {
-            var organisations = establishments.Select(x => new EducationalOrganisationEntity
+            var organisations = establishments.Select(x => CleanseEstablishment(x)).ToArray();
+
+            await _educationalOrganisationImportService.InsertDataIntoStaging(organisations.Select(c => (EducationalOrganisationImport)c).ToList());
+        }
+
+        private static EducationalOrganisationEntity CleanseEstablishment(Establishment x)
+        {
+            return new EducationalOrganisationEntity
             {
                 Name = x.EstablishmentName,
                 EducationalType = x.TypeOfEstablishment?.DisplayName ?? string.Empty,
-                AddressLine1 = x.Street,
-                AddressLine2 = x.Locality,
-                AddressLine3 = x.Address3,
-                Town = x.Town,
+                AddressLine1 = x.Street?.Length > 150 ? x.Street[..150] : x.Street,
+                AddressLine2 = x.Locality?.Length > 150 ? x.Locality[..150] : x.Locality,
+                AddressLine3 = x.Address3?.Length > 150 ? x.Address3[..150] : x.Address3,
+                Town = x.Town?.Length > 50 ? x.Town[..50] : x.Town,
                 County = x.County?.DisplayName ?? string.Empty,
                 PostCode = x.Postcode,
                 URN = x.URN.ToString()
-            }).ToArray();
-
-            await _educationalOrganisationImportService.InsertDataIntoStaging(organisations.Select(c => (EducationalOrganisationImport)c).ToList());
+            };
         }
     }
 }
