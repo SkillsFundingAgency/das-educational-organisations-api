@@ -118,7 +118,7 @@ stages:
   variables:
    - group: PROD Management Resources
    - group: PROD Shared Resources
-   - group: __PRODSpecificReleaseVariables__ #PLACEHOLDER
+   - group: PROD das-educational-organisations-api 
   jobs:
    - template: pipeline-templates/job/deploy.yml
      parameters:
