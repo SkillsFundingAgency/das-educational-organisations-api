@@ -9,21 +9,21 @@ using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.EducationalOrganisations.Api.AppStart;
 using SFA.DAS.EducationalOrganisations.Api.Infrastructure;
 using SFA.DAS.EducationalOrganisations.Data;
-using SFA.DAS.EducationOrganisations.Domain.Configuration;
+using SFA.DAS.EducationalOrganisations.Domain.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var rootConfiguration = builder.Configuration.LoadConfiguration();
 
 builder.Services.AddOptions();
-builder.Services.Configure<EducationOrganisationsConfiguration>(rootConfiguration.GetSection(nameof(EducationOrganisationsConfiguration)));
-builder.Services.AddSingleton(cfg => cfg.GetService<IOptions<EducationOrganisationsConfiguration>>()!.Value);
+builder.Services.Configure<EducationalOrganisationsConfiguration>(rootConfiguration.GetSection(nameof(EducationalOrganisationsConfiguration)));
+builder.Services.AddSingleton(cfg => cfg.GetService<IOptions<EducationalOrganisationsConfiguration>>()!.Value);
 
 builder.Services.AddServiceRegistration();
 
 var educationOrganisationsConfiguration = rootConfiguration
-    .GetSection(nameof(EducationOrganisationsConfiguration))
-    .Get<EducationOrganisationsConfiguration>();
+    .GetSection(nameof(EducationalOrganisationsConfiguration))
+    .Get<EducationalOrganisationsConfiguration>();
 builder.Services.AddDatabaseRegistration(educationOrganisationsConfiguration!, rootConfiguration["EnvironmentName"]);
 
 if (rootConfiguration["EnvironmentName"] != "DEV")
@@ -53,7 +53,7 @@ builder.Services
         if (!(rootConfiguration["EnvironmentName"]!.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase) ||
               rootConfiguration["EnvironmentName"]!.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)))
         {
-            o.Conventions.Add(new AuthorizeControllerModelConvention(new List<string> ()));
+            o.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
         }
         o.Conventions.Add(new ApiExplorerGroupPerVersionConvention());
     })
@@ -71,11 +71,13 @@ builder.Services.AddApplicationInsightsTelemetry();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EducationalOrganisationsApi", Version = "v1" });
+    c.SwaggerDoc("operations", new OpenApiInfo { Title = "EducationalOrganisationsApi operations" });
     c.OperationFilter<SwaggerVersionHeaderFilter>();
     c.DocumentFilter<JsonPatchDocumentFilter>();
 });
-            
-builder.Services.AddApiVersioning(opt => {
+
+builder.Services.AddApiVersioning(opt =>
+{
     opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
 });
 
@@ -85,9 +87,10 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "EducationalOrganisationsApi v1");
+    c.SwaggerEndpoint("/swagger/operations/swagger.json", "Operations v1");
     c.RoutePrefix = string.Empty;
 });
-            
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

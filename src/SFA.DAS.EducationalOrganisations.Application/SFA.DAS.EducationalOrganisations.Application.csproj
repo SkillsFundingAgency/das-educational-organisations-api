@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Polly" Version="8.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.Data\SFA.DAS.EducationalOrganisations.Data.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.Domain\SFA.DAS.EducationalOrganisations.Domain.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.SoapClient\SFA.DAS.EducationalOrganisations.SoapClient.csproj" />
+  </ItemGroup>
+
+</Project>

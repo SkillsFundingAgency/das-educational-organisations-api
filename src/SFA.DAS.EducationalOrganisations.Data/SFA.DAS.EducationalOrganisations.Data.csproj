@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SFA.DAS.EducationOrganisations.Domain\SFA.DAS.EducationOrganisations.Domain.csproj" />
+      <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.Domain\SFA.DAS.EducationalOrganisations.Domain.csproj" />
     </ItemGroup>
 
 </Project>

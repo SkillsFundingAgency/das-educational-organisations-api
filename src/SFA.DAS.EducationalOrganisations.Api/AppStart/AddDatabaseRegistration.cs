@@ -1,13 +1,16 @@
 using Azure.Identity;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EducationalOrganisations.Data;
-using SFA.DAS.EducationOrganisations.Domain.Configuration;
+using SFA.DAS.EducationalOrganisations.Data.Repository;
+using SFA.DAS.EducationalOrganisations.Domain.Configuration;
+using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
 namespace SFA.DAS.EducationalOrganisations.Api.AppStart;
 
 public static class DatabaseExtensions
 {
-    public static void AddDatabaseRegistration(this IServiceCollection services, EducationOrganisationsConfiguration config, string? environmentName)
+    public static void AddDatabaseRegistration(this IServiceCollection services, EducationalOrganisationsConfiguration config, string? environmentName)
     {
         services.AddHttpContextAccessor();
         if (environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
@@ -16,13 +19,13 @@ public static class DatabaseExtensions
         }
         else if (environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
         {
-            services.AddDbContext<EducationalOrganisationDataContext>(options=>options.UseSqlServer(config.ConnectionString),ServiceLifetime.Transient);
+            services.AddDbContext<EducationalOrganisationDataContext>(options => options.UseSqlServer(config.DatabaseConnectionString), ServiceLifetime.Transient);
         }
         else
         {
-            services.AddDbContext<EducationalOrganisationDataContext>(ServiceLifetime.Transient);    
+            services.AddDbContext<EducationalOrganisationDataContext>(ServiceLifetime.Transient);
         }
-            
+
         services.AddSingleton(new EnvironmentConfiguration(environmentName));
 
         services.AddScoped<IEducationalOrganisationDataContext, EducationalOrganisationDataContext>(provider => provider.GetService<EducationalOrganisationDataContext>()!);
@@ -33,5 +36,9 @@ public static class DatabaseExtensions
             new VisualStudioCodeCredential(),
             new VisualStudioCredential())
         );
+
+        services.AddTransient<IImportAuditRepository, ImportAuditRepository>();
+        services.AddTransient<IEducationalOrganisationImportRepository, EducationalOrganisationImportRepository>();
+        services.AddTransient<IEducationalOrganisationEntityRepository, EducationalOrganisationEntityRepository>();
     }
 }
