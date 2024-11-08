@@ -44,4 +44,10 @@
       <ProjectReference Include="..\SFA.DAS.EducationalOrganisations.Domain\SFA.DAS.EducationalOrganisations.Domain.csproj" />
     </ItemGroup>
 
+	<ItemGroup>
+		<None Include="web.config">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>
