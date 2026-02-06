@@ -150,7 +150,6 @@ stages:
   variables:
   - group: DevTest Management Resources
   - group: DEMO DevTest Shared Resources
-  - group: DEMO das-educational-organisations-api
   jobs:
   - template: pipeline-templates/job/deploy.yml
     parameters:
