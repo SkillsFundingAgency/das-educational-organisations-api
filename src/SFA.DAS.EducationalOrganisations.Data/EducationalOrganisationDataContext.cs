@@ -47,17 +47,23 @@ public class EducationalOrganisationDataContext : DbContext, IEducationalOrganis
         optionsBuilder.UseLazyLoadingProxies();
 
         if (_configuration == null
-            || _environmentConfiguration.EnvironmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase)
-            || _environmentConfiguration.EnvironmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
+            || _environmentConfiguration.EnvironmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
         {
             return;
         }
 
+        var connectionStringBuilder = new SqlConnectionStringBuilder(_configuration.DatabaseConnectionString);
+        var useManagedIdentity = !connectionStringBuilder.IntegratedSecurity && string.IsNullOrEmpty(connectionStringBuilder.UserID);
+
         var connection = new SqlConnection
         {
-            ConnectionString = _configuration.DatabaseConnectionString,
-            AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AzureResource })).Result.Token,
+            ConnectionString = _configuration.DatabaseConnectionString
         };
+
+        if (useManagedIdentity)
+        {
+            connection.AccessToken = _azureServiceTokenProvider.GetTokenAsync(new TokenRequestContext(scopes: [AzureResource])).Result.Token;
+        }
 
         optionsBuilder.UseSqlServer(connection, options =>
             options.EnableRetryOnFailure(

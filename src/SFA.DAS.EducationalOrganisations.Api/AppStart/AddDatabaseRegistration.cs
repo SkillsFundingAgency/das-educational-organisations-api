@@ -1,5 +1,4 @@
 using Azure.Identity;
-using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EducationalOrganisations.Data;
 using SFA.DAS.EducationalOrganisations.Data.Repository;
@@ -16,10 +15,6 @@ public static class DatabaseExtensions
         if (environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase))
         {
             services.AddDbContext<EducationalOrganisationDataContext>(options => options.UseInMemoryDatabase("SFA.DAS.EducationalOrganisation"), ServiceLifetime.Transient);
-        }
-        else if (environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
-        {
-            services.AddDbContext<EducationalOrganisationDataContext>(options => options.UseSqlServer(config.DatabaseConnectionString), ServiceLifetime.Transient);
         }
         else
         {

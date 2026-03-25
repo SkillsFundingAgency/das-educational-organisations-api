@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
@@ -22,7 +22,9 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
 
         public async Task<IEnumerable<EducationalOrganisationImport>> GetAll()
         {
-            var results = await _dataContext.EducationalOrganisationImport.ToListAsync();
+            var results = await _dataContext.EducationalOrganisationImport
+                .AsNoTracking()
+                .ToListAsync();
             return results;
         }
 
