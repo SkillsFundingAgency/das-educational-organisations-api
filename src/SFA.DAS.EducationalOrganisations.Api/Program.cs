@@ -65,7 +65,7 @@ builder.Services
         options.SerializerSettings.Converters.Add(new StringEnumConverter());
     });
 
-builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddApplicationInsightsTelemetry(rootConfiguration);
 
 builder.Services.AddSwaggerGen(c =>
 {
