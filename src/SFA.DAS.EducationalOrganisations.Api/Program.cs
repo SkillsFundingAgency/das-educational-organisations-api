@@ -66,6 +66,7 @@ builder.Services
     });
 
 builder.Services.AddApplicationInsightsTelemetry(rootConfiguration);
+builder.Services.AddTelemetryRegistration(rootConfiguration);
 
 builder.Services.AddSwaggerGen(c =>
 {
