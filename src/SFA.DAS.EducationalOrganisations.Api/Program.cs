@@ -7,7 +7,6 @@ using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.EducationalOrganisations.Api.AppStart;
-using SFA.DAS.EducationalOrganisations.Api.Infrastructure;
 using SFA.DAS.EducationalOrganisations.Data;
 using SFA.DAS.EducationalOrganisations.Domain.Configuration;
 
@@ -66,14 +65,14 @@ builder.Services
         options.SerializerSettings.Converters.Add(new StringEnumConverter());
     });
 
-builder.Services.AddApplicationInsightsTelemetry();
+builder.Services.AddApplicationInsightsTelemetry(rootConfiguration);
+builder.Services.AddTelemetryRegistration(rootConfiguration);
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EducationalOrganisationsApi", Version = "v1" });
     c.SwaggerDoc("operations", new OpenApiInfo { Title = "EducationalOrganisationsApi operations" });
     c.OperationFilter<SwaggerVersionHeaderFilter>();
-    c.DocumentFilter<JsonPatchDocumentFilter>();
 });
 
 builder.Services.AddApiVersioning(opt =>
