@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.EducationalOrganisations.Domain.Entities;
 using SFA.DAS.EducationalOrganisations.Domain.Interfaces;
 
@@ -22,27 +22,32 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
 
         public async Task<IEnumerable<EducationalOrganisationEntity>> GetAll()
         {
-            var results = await _dataContext.EducationalOrganisationEntities.ToListAsync();
+            var results = await _dataContext.EducationalOrganisationEntities
+                .AsNoTracking()
+                .ToListAsync();
             return results;
         }
 
         public async Task<EducationalOrganisationEntity?> GetById(Guid id)
         {
-            return await _dataContext.EducationalOrganisationEntities.FindAsync(id);
+            return await _dataContext.EducationalOrganisationEntities
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByName(string searchTerm, int maximumResults)
         {
-            var organisations = await _dataContext.EducationalOrganisationEntities
-                              .Where(x => x.Name.Contains(searchTerm))
-                              .ToListAsync();
-
-            return organisations.Take(maximumResults);
+            return await _dataContext.EducationalOrganisationEntities
+                .AsNoTracking()
+                .Where(x => x.Name.Contains(searchTerm))
+                .Take(maximumResults)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<EducationalOrganisationEntity>> SearchByUrn(string urn)
         {
             return await _dataContext.EducationalOrganisationEntities
+                              .AsNoTracking()
                               .Where(x => x.URN.Contains(urn))
                               .ToListAsync();
         }
@@ -50,6 +55,7 @@ namespace SFA.DAS.EducationalOrganisations.Data.Repository
         public async Task<EducationalOrganisationEntity?> FindByUrn(string urn)
         {
             return await _dataContext.EducationalOrganisationEntities
+                              .AsNoTracking()
                               .Where(x => x.URN.Contains(urn)).FirstOrDefaultAsync();
         }
 
