@@ -8,7 +8,7 @@ public static class AddTelemetryRegistrationExtension
     {
         var appInsightsConnectionString = configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"];
 
-        if (!string.IsNullOrEmpty(appInsightsConnectionString))
+        if (!string.IsNullOrWhiteSpace(appInsightsConnectionString))
         {
             services.AddOpenTelemetry().UseAzureMonitor(options =>
             {
